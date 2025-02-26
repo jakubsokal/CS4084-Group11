@@ -16,8 +16,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/image"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="HardcodedText"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:ignore="HardcodedText" />
 
     <Toolbar
         android:id="@+id/toolbar"

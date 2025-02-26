@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Animation {
-    public void animateButtonTint(final Button button) {
+    public void animateButtonTint(Button button) {
         int startColor = button.getBackgroundTintList() != null
                 ? button.getBackgroundTintList().getDefaultColor()
                 : button.getSolidColor();
@@ -26,13 +26,16 @@ public class Animation {
         colorAnim.start();
     }
 
-    public void animateHyperLink(final TextView button) {
+    public void animateHyperLink(TextView button) {
         int startColor = button.getCurrentTextColor();
         int endColor = Color.parseColor("#019CB4");
 
         ValueAnimator colorAnim = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, endColor);
         colorAnim.setDuration(50);
-        colorAnim.addUpdateListener(animator -> button.setTextColor((int)animator.getAnimatedValue()));
+        colorAnim.addUpdateListener(animator -> {
+            int animatedColor = (int) animator.getAnimatedValue();
+            button.setTextColor(animatedColor);
+        });
         colorAnim.start();
     }
 }
