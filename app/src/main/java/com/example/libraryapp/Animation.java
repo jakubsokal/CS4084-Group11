@@ -4,11 +4,11 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.widget.Button;
+import android.view.View;
 import android.widget.TextView;
 
 public class Animation {
-    public void animateButtonTint(Button button) {
+    public void animateButtonTint(View button) {
         int startColor = button.getBackgroundTintList() != null
                 ? button.getBackgroundTintList().getDefaultColor()
                 : button.getSolidColor();

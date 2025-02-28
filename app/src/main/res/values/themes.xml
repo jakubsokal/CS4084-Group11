@@ -3,8 +3,10 @@
     <style name="Base.Theme.LibraryApp" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:fontFamily">@font/urbanist</item>
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
-
+    <style name="navigation_bar">
+        <item name="android:fontFamily">@font/urbanist</item>
+        <item name="android:textSize">14sp</item>
+    </style>
     <style name="Theme.LibraryApp" parent="Base.Theme.LibraryApp" />
 </resources>
