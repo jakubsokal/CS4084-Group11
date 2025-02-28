@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/homefilled"
+        android:id="@+id/navbar_home"
+        android:icon="@drawable/home_filled"
         android:title="Home"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="HardcodedText" />
 
     <item
-        android:id="@+id/nav_search"
-        android:icon="@drawable/chairfilled"
+        android:id="@+id/navbar_book"
+        android:icon="@drawable/chair_filled"
         android:title="Book"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="HardcodedText" />
 
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/folderfilled"
-        android:title="Profile"
-        app:showAsAction="always" />
+        android:id="@+id/navbar_manage"
+        android:icon="@drawable/folder_filled"
+        android:title="Manage"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction,HardcodedText" />
 
     <item
-        android:id="@+id/sad"
-        android:icon="@drawable/notificationsfilled"
-        android:title="Profile"
-        app:showAsAction="always" />
+        android:id="@+id/navbar_alert"
+        android:icon="@drawable/notifications_filled"
+        android:title="Alerts"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText" />
 
 </menu>
