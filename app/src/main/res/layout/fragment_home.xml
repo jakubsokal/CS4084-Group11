@@ -27,18 +27,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText,TextSizeCheck" />
+		
+	<Button
+		android:id="@+id/bookSeat"
+		android:text="Book A Seat"
+		android:layout_width="300dp"
+		android:layout_height="55dp"
+		android:layout_marginTop="586dp"
+		android:background="@drawable/rounded_button"
+		app:backgroundTint="@color/green"
+		android:visibility="visible" 
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:ignore="HardcodedText" />
 
-    <Button
-        android:id="@+id/bookSeat"
-        android:text="Book A Seat"
-        android:layout_width="300dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="586dp"
-        android:background="@drawable/rounded_button"
-        app:backgroundTint="@color/green"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
