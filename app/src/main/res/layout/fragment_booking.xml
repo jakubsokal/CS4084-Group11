@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:layout_marginTop="90dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,9 +57,9 @@
         android:id="@+id/bookSeatButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Book Seat"
-        android:textSize="18sp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/green"
+        android:text="Book Seat"
         android:textColor="@android:color/white"
-        android:layout_marginTop="32dp" />
+        android:textSize="18sp" />
 </LinearLayout>
