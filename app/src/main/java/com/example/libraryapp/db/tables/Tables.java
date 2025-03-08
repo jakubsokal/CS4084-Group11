@@ -3,7 +3,6 @@ package com.example.libraryapp.db.tables;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import androidx.annotation.Nullable;
 
 public class Tables extends SQLiteOpenHelper {
@@ -20,7 +19,6 @@ public class Tables extends SQLiteOpenHelper {
     private static final String COL_3 = "table_number";
 
     private static final String COL_4 = "seat_count";
-
 
     public Tables(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);

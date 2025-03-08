@@ -10,7 +10,7 @@ public class Alerts extends SQLiteOpenHelper {
 
     private static final int DB_VERSION = 1;
 
-    private static final String TABLE_NAME = "booked";
+    private static final String TABLE_NAME = "alerts";
 
     private static final String COL_1 = "alert_id";
 
