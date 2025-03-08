@@ -26,14 +26,14 @@ public class Seats extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String queryRooms = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME+ " (\n" +
+        String querySeats = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME+ " (\n" +
                 COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 COL_2 + " INTEGER,\n" +
                 COL_3 + " INTEGER,\n" +
                 COL_4 + " INTEGER,\n" +
                 "FOREIGN KEY("+ COL_3 +") REFERENCES tables(table_id))";
 
-        db.execSQL(queryRooms);
+        db.execSQL(querySeats);
     }
 
     @Override

@@ -47,11 +47,11 @@ public class Booked extends SQLiteOpenHelper {
                 COL_4 + " INTEGER,\n" +
                 COL_5 + " INTEGER,\n" +
                 COL_6 + " INTEGER," +
-                COL_7 + " INTEGER,\n" +
-                COL_8 + " INTEGER,\n" +
-                COL_9 + " INTEGER,\n" +
+                COL_7 + " TEXT,\n" +
+                COL_8 + " TEXT,\n" +
+                COL_9 + " TEXT,\n" +
                 COL_10 + " INTEGER,\n" +
-                COL_11 + " INTEGER,\n" +
+                COL_11 + " TEXT DEFAULT CURRENT_DATE,\n" +
                 "FOREIGN KEY("+ COL_2 +") REFERENCES users(user_id),\n"+
                 "FOREIGN KEY("+ COL_3 +") REFERENCES floors(floor_id),\n" +
                 "FOREIGN KEY("+ COL_4 +") REFERENCES rooms(room_id),\n" +

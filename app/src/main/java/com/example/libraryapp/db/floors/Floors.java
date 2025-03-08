@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
+
 public class Floors extends SQLiteOpenHelper {
     private static final String DB_NAME = "libraryapp.db";
 
@@ -21,11 +22,11 @@ public class Floors extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String queryUsers = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME+ " (\n" +
+        String queryFloors = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME+ " (\n" +
                 COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 COL_2 + " TEXT)";
 
-        db.execSQL(queryUsers);
+        db.execSQL(queryFloors);
     }
 
     @Override

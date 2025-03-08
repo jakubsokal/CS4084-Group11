@@ -18,7 +18,7 @@ public class Alerts extends SQLiteOpenHelper {
 
     private static final String COL_3 = "seat_id";
 
-    private static final String COL_4 = "date";
+    private static final String COL_4 = "cancel_date";
 
     private static final String COL_5 = "created_on";
 

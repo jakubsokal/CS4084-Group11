@@ -29,7 +29,7 @@ public class Rooms extends SQLiteOpenHelper {
                 COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 COL_2 + " TEXT,\n" +
                 COL_3 + " INTEGER,\n" +
-                "FOREIGN KEY("+ COL_3 +") REFERENCES floors(floor_name))";
+                "FOREIGN KEY("+ COL_3 +") REFERENCES floors(floor_id))";
 
         db.execSQL(queryRooms);
     }
