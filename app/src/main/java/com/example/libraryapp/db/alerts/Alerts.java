@@ -14,13 +14,15 @@ public class Alerts extends SQLiteOpenHelper {
 
     private static final String COL_1 = "alert_id";
 
-    private static final String COL_2 = "room_id";
+    private static final String COL_2 = "book_id";
 
-    private static final String COL_3 = "seat_id";
+    private static final String COL_3 = "room_id";
 
-    private static final String COL_4 = "cancel_date";
+    private static final String COL_4 = "seat_id";
 
-    private static final String COL_5 = "created_on";
+    private static final String COL_5 = "cancel_date";
+
+    private static final String COL_6 = "created_on";
 
     public Alerts(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -30,10 +32,12 @@ public class Alerts extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String queryAlert = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME+ " (\n" +
                 COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                COL_2 + " INTEGER NOT NULL,\n" +
-                COL_3 + " INTEGER NOT NULL,\n" +
-                COL_4 + " TEXT NOT NULL,\n" +
-                COL_5 + " TEXT DEFAULT CURRENT_DATE)";
+                COL_2 + " INTEGER,\n" +
+                COL_3 + " INTEGER,\n" +
+                COL_4 + " INTEGER,\n" +
+                COL_5 + " TEXT NOT NULL,\n" +
+                COL_6 + " TEXT DEFAULT CURRENT_DATE,\n" +
+                "FOREIGN KEY("+ COL_2 +") REFERENCES booked(book_id))";
 
         db.execSQL(queryAlert);
     }
