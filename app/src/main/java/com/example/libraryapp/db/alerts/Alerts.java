@@ -1,4 +1,4 @@
-package com.example.libraryapp.db;
+package com.example.libraryapp.db.alerts;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

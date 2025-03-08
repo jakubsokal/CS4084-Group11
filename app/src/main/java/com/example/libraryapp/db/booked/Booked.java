@@ -1,4 +1,4 @@
-package com.example.libraryapp.db;
+package com.example.libraryapp.db.booked;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

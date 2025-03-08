@@ -1,9 +1,12 @@
-package com.example.libraryapp.db;
+package com.example.libraryapp.db.users;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
+
+import com.example.libraryapp.db.Encryption;
+
 public class Users extends SQLiteOpenHelper {
     private static final String DB_NAME = "libraryapp.db";
 

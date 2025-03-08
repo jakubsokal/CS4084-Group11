@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.libraryapp.db.Users;
+import com.example.libraryapp.db.users.Users;
 
 public class MainActivity extends AppCompatActivity {
     @Override
