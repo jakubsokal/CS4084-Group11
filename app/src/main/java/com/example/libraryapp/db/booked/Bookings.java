@@ -8,13 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 import com.example.libraryapp.db.users.Users;
 
-/**
- * Database helper class for managing library seat bookings.
- * This class handles all booking-related database operations including:
- * - Creating and managing bookings
- * - Checking seat availability
- * - Managing booking status
- */
 public class Bookings extends SQLiteOpenHelper {
     private static final String DB_NAME = "libraryapp.db";
     private static final String TABLE_NAME = "bookings";
@@ -38,9 +31,7 @@ public class Bookings extends SQLiteOpenHelper {
     public Bookings(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
-        // Initialize users table first since bookings depends on it
         new Users(context);
-        // Ensure our table exists
         SQLiteDatabase db = getWritableDatabase();
         ensureBookingsTableExists(db);
     }
@@ -71,16 +62,6 @@ public class Bookings extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    /**
-     * Checks if a seat is available for booking during the specified time slot.
-     *
-     * @param floorNumber The floor number where the seat is located
-     * @param seatId The unique identifier of the seat
-     * @param date The date of the booking (format: YYYY-MM-DD)
-     * @param startTime The start time of the booking (format: HH:mm)
-     * @param endTime The end time of the booking (format: HH:mm)
-     * @return true if the seat is available, false otherwise
-     */
     public boolean isSeatAvailable(int floorNumber, String seatId, String date, String startTime, String endTime) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT COUNT(*) FROM " + TABLE_NAME +
@@ -107,17 +88,6 @@ public class Bookings extends SQLiteOpenHelper {
         }
     }
 
-    /**
-     * Creates a new booking in the database.
-     *
-     * @param userId The ID of the user making the booking
-     * @param floorNumber The floor number where the seat is located
-     * @param seatId The unique identifier of the seat
-     * @param date The date of the booking (format: YYYY-MM-DD)
-     * @param startTime The start time of the booking (format: HH:mm)
-     * @param endTime The end time of the booking (format: HH:mm)
-     * @return The ID of the new booking, or -1 if the creation failed
-     */
     public long createBooking(int userId, int floorNumber, String seatId, 
                             String date, String startTime, String endTime) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -134,12 +104,6 @@ public class Bookings extends SQLiteOpenHelper {
         return db.insert(TABLE_NAME, null, values);
     }
 
-    /**
-     * Retrieves all active bookings for a specific user.
-     *
-     * @param userId The ID of the user
-     * @return A Cursor containing the booking records
-     */
     public Cursor getUserBookings(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME +
@@ -148,12 +112,6 @@ public class Bookings extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{String.valueOf(userId)});
     }
 
-    /**
-     * Cancels an active booking.
-     *
-     * @param bookingId The ID of the booking to cancel
-     * @return true if the booking was successfully cancelled, false otherwise
-     */
     public boolean cancelBooking(int bookingId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -164,13 +122,6 @@ public class Bookings extends SQLiteOpenHelper {
                 new String[]{String.valueOf(bookingId)}) > 0;
     }
 
-    /**
-     * Retrieves all active bookings for a specific floor and date.
-     *
-     * @param floorNumber The floor number to query
-     * @param date The date to query (format: YYYY-MM-DD)
-     * @return A Cursor containing the booking records
-     */
     public Cursor getFloorBookings(int floorNumber, String date) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME +
