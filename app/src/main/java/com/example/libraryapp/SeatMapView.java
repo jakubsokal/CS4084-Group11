@@ -51,8 +51,7 @@ public class SeatMapView extends View {
         paint = new Paint();
         paint.setAntiAlias(true);
         seats = new ArrayList<>();
-        
-        // Initialize seats (4x6 grid)
+
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 6; col++) {
                 seats.add(new Seat(row, col, true));
@@ -77,27 +76,23 @@ public class SeatMapView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // Draw grid lines
         paint.setColor(Color.GRAY);
         paint.setStrokeWidth(2);
         paint.setStyle(Paint.Style.STROKE);
         
         float cellWidth = getWidth() / 7f;
         float cellHeight = getHeight() / 5f;
-        
-        // Draw vertical lines
+
         for (int i = 1; i < 7; i++) {
             float x = i * cellWidth;
             canvas.drawLine(x, 0, x, getHeight(), paint);
         }
-        
-        // Draw horizontal lines
+
         for (int i = 1; i < 5; i++) {
             float y = i * cellHeight;
             canvas.drawLine(0, y, getWidth(), y, paint);
         }
 
-        // Draw seats
         paint.setStyle(Paint.Style.FILL);
         for (Seat seat : seats) {
             if (seat == selectedSeat) {
@@ -108,8 +103,7 @@ public class SeatMapView extends View {
                 paint.setColor(Color.RED);
             }
             canvas.drawRoundRect(seat.rect, 8, 8, paint);
-
-            // Draw seat number
+            
             paint.setColor(Color.WHITE);
             paint.setTextSize(24);
             paint.setTextAlign(Paint.Align.CENTER);

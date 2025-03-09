@@ -19,8 +19,7 @@ public class Bookings extends SQLiteOpenHelper {
     private static final String COL_6 = "start_time";
     private static final String COL_7 = "end_time";
     private static final String COL_8 = "status";
-    
-    // Booking status constants
+
     public static final int STATUS_ACTIVE = 1;
     public static final int STATUS_COMPLETED = 2;
     public static final int STATUS_CANCELLED = 3;
