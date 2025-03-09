@@ -17,14 +17,6 @@ import java.util.Locale;
 import java.text.SimpleDateFormat;
 import com.example.libraryapp.db.booked.Bookings;
 
-/**
- * Fragment for handling library seat bookings.
- * This fragment allows users to:
- * - Select a date and time for their booking
- * - Choose a floor
- * - Select an available seat
- * - Create a booking for the selected seat
- */
 public class BookingFragment extends Fragment implements SeatMapView.OnSeatSelectedListener {
     private Button btnDatePicker;
     private Button btnTimePicker;

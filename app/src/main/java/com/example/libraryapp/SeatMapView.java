@@ -63,8 +63,8 @@ public class SeatMapView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        float seatWidth = w / 7f; // 6 seats plus margins
-        float seatHeight = h / 5f; // 4 rows plus margins
+        float seatWidth = w / 7f;
+        float seatHeight = h / 5f;
         
         for (Seat seat : seats) {
             float left = (seat.column + 0.5f) * seatWidth;

@@ -31,19 +31,15 @@ public class LoginPage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_page);
 
-        // Initialize database helper
         dbHelper = new Users(this);
 
-        // Initialize views
         emailInput = findViewById(R.id.email);
         passwordInput = findViewById(R.id.enterpassword);
         loginButton = findViewById(R.id.loginbutton);
         registerLink = findViewById(R.id.textView);
 
-        // Setup login button click listener
         loginButton.setOnClickListener(v -> attemptLogin());
 
-        // Setup register link click listener
         registerLink.setOnClickListener(v -> {
             Intent intent = new Intent(LoginPage.this, RegisterActivity.class);
             startActivity(intent);
@@ -65,7 +61,6 @@ public class LoginPage extends AppCompatActivity {
             return;
         }
 
-        // Query the database for the user
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {"password", "status"};
         String selection = "email = ?";
@@ -87,17 +82,14 @@ public class LoginPage extends AppCompatActivity {
 
                     Encryption encryption = new Encryption();
                     if (encryption.verify(password, storedHash)) {
-                        // Successful login
                         Intent intent = new Intent(LoginPage.this, HomeActivity.class);
                         startActivity(intent);
-                        finish(); // Close login activity
+                        finish();
                     } else {
-                        // Failed login - wrong password
                         Toast.makeText(this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();
                     }
                 }
             } else {
-                // No user found with that email
                 Toast.makeText(this, "Invalid credentials. Please try again.", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
