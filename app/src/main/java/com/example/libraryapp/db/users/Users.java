@@ -1,6 +1,7 @@
 package com.example.libraryapp.db.users;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
@@ -27,7 +28,8 @@ public class Users extends SQLiteOpenHelper {
 
     public Users(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
-        getWritableDatabase(); //Just for testing so DB has a user entry
+        SQLiteDatabase db = getWritableDatabase();
+        ensureTestUserExists(db);
     }
 
     @Override
@@ -41,15 +43,32 @@ public class Users extends SQLiteOpenHelper {
                 COL_6 + " TEXT DEFAULT CURRENT_DATE)";
 
         db.execSQL(queryUsers);
+        ensureTestUserExists(db);
+    }
 
-        //Insert statement for testing logging
-        String password = new Encryption().encrypt("tester123");
-        String insert = "INSERT INTO users("
-                + COL_2 + ", "
-                + COL_3 + ")" +
-                "VALUES('tester@ul.ie', '" +  password + "' )";
+    private void ensureTestUserExists(SQLiteDatabase db) {
+        // Check if test user exists
+        Cursor cursor = db.query(TABLE_NAME, new String[]{COL_1}, 
+                COL_2 + "=?", new String[]{"tester@ul.ie"}, 
+                null, null, null);
+        
+        boolean userExists = cursor != null && cursor.getCount() > 0;
+        if (cursor != null) {
+            cursor.close();
+        }
 
-        db.execSQL(insert);
+        if (!userExists) {
+            // Create test user if it doesn't exist
+            String password = new Encryption().encrypt("tester123");
+            String insert = "INSERT INTO " + TABLE_NAME + "("
+                    + COL_2 + ", "
+                    + COL_3 + ", "
+                    + COL_4 + ", "
+                    + COL_5 + ") " +
+                    "VALUES('tester@ul.ie', '" + password + "', 0, 1)";
+            
+            db.execSQL(insert);
+        }
     }
 
     @Override
