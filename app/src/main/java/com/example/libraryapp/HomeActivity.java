@@ -2,7 +2,7 @@ package com.example.libraryapp;
 
 import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
-import androidx. appcompat. widget. Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,10 +25,10 @@ public class HomeActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.navbar_home) {
                 selectedFragment = new HomeFragment();
             } else if (item.getItemId() == R.id.navbar_book) {
-                //add fragment here
+                selectedFragment = new BookingFragment();
             } else if (item.getItemId() == R.id.navbar_manage) {
                 //add fragment here
-            }else{
+            } else if (item.getItemId() == R.id.navbar_alert) {
                 //add alert fragment here
             }
 
