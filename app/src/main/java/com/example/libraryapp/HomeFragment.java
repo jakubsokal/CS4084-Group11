@@ -11,7 +11,6 @@ public class HomeFragment extends Fragment {
         super(R.layout.fragment_home);
     }
 
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.bookSeat).setOnClickListener(v -> 
