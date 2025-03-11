@@ -25,6 +25,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:text="."
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginStart="25dp"
+        android:background="@drawable/rounded_button"
+        android:paddingStart="13dp"
+        android:drawableLeft="@drawable/back_arrow"
+        app:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+
     <TextView
         android:id="@+id/welcome_text"
         android:layout_width="0dp"
@@ -37,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="155dp"
+        android:layout_marginTop="170dp"
         android:paddingHorizontal="20dp"/>
 
     <EditText

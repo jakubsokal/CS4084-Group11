@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText registerEmail, registerPassword, registerConfirmPassword;
-    private Button registerSubmit;
+    private Button registerSubmit, backButton;
     private TextView loginNow;
 
     @Override
@@ -27,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerConfirmPassword = findViewById(R.id.register_confirm_password);
         registerSubmit = findViewById(R.id.register_submit);
         loginNow = findViewById(R.id.login_now_link);
+        backButton = findViewById(R.id.back);
 
         registerSubmit.setOnClickListener(v -> {
             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
@@ -34,6 +35,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         loginNow.setOnClickListener(v -> {
+            startActivity(new Intent(RegisterActivity.this, LoginPage.class));
+            finish();
+        });
+
+        backButton.setOnClickListener(v -> {
             startActivity(new Intent(RegisterActivity.this, LoginPage.class));
             finish();
         });
