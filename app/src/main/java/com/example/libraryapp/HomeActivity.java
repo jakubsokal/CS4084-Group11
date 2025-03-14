@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
             if (click.getItemId() == R.id.menu_home) {
                 selectedFragment = new HomeFragment();
             } else if (click.getItemId() == R.id.menu_book) {
-                //add fragment here
+                selectedFragment = new BookingFragment();
             } else if (click.getItemId() == R.id.menu_manage) {
                 //add fragment here
             }else if (click.getItemId() == R.id.menu_alerts){
