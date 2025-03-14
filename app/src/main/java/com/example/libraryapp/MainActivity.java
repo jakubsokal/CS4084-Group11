@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         Button login = findViewById(R.id.login);
         login.setOnClickListener(click -> {
             new Animation().animateButtonTint(click);
-            Intent intent = new Intent(MainActivity.this, LoginPage.class);
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             startActivity(intent);
         });
     }
