@@ -57,6 +57,13 @@
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/dark_green"
+        android:paddingTop="60dp"
+        app:itemIconSize="30dp"
+        app:itemVerticalPadding="20dp"
+        app:itemTextAppearance="@style/burger_menu"
+        app:itemTextColor="@color/burger_color_selector"
+        app:itemIconTint="@color/burger_color_selector"
         app:menu="@menu/top_nav_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

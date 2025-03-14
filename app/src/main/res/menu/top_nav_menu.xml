@@ -4,30 +4,41 @@
     <item
         android:id="@+id/menu_home"
         android:title="Home"
+        android:icon="@drawable/home_filled"
         tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/menu_book"
         android:title="Book"
+        android:icon="@drawable/chair_filled"
         tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/menu_manage"
         android:title="Manage"
+        android:icon="@drawable/folder_filled"
         tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/menu_alerts"
         android:title="Alerts"
+        android:icon="@drawable/notifications_filled"
         tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/menu_account"
         android:title="Account"
+        android:icon="@drawable/account_filled"
         tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/menu_contact"
         android:title="Contact Us"
+        android:icon="@drawable/help_filled"
+        tools:ignore="HardcodedText" />
+    <item
+        android:id="@+id/menu_sign_out"
+        android:title="Sign Out"
+        android:icon="@drawable/power_filled"
         tools:ignore="HardcodedText" />
 </menu>
