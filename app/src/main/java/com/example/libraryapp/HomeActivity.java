@@ -13,15 +13,13 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-public class HomeActivity extends AppCompatActivity implements INavbar {
-    private BottomNavigationView bottomNav;
-
+public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
-        bottomNav = findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
@@ -100,10 +98,5 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container_view, selectedFragment)
                 .commit();
-    }
-
-    @Override
-    public void bottomNavItemSelected(int itemId) {
-        bottomNav.setSelectedItemId(itemId);
     }
 }
