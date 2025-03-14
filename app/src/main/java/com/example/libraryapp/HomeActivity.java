@@ -1,5 +1,6 @@
 package com.example.libraryapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx. appcompat. widget. Toolbar;
@@ -10,6 +11,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 public class HomeActivity extends AppCompatActivity {
     @Override
@@ -33,22 +35,17 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             if(selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container_view, selectedFragment)
-                        .commit();
+                selectFragment(selectedFragment);
             }
+
             return true;
         });
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container_view, new HomeFragment())
-                .commit();
 
         DrawerLayout drawerLayout = findViewById(R.id.navigation_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                HomeActivity.this, drawerLayout, toolbar, R.string.menu_open, R.string.menu_close);
-
+                HomeActivity.this, drawerLayout, toolbar,
+                R.string.menu_open, R.string.menu_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -62,5 +59,44 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        NavigationView burger = findViewById(R.id.nav_view);
+        burger.setNavigationItemSelectedListener( click -> {
+            Fragment selectedFragment = null;
+            if (click.getItemId() == R.id.menu_home) {
+                selectedFragment = new HomeFragment();
+            } else if (click.getItemId() == R.id.menu_book) {
+                //add fragment here
+            } else if (click.getItemId() == R.id.menu_manage) {
+                //add fragment here
+            }else if (click.getItemId() == R.id.menu_alerts){
+                //add alert fragment here
+            }else if (click.getItemId() == R.id.menu_account){
+                //add account fragment here
+            }else if (click.getItemId() == R.id.menu_contact){
+                //add contact fragment here
+            }else {
+                //goes back to main screen.
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            if(selectedFragment != null) {
+                selectFragment(selectedFragment);
+            }
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+
+            return true;
+        });
+
+        selectFragment(new HomeFragment());
+    }
+
+    private void selectFragment(Fragment selectedFragment){
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container_view, selectedFragment)
+                .commit();
     }
 }
