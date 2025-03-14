@@ -14,8 +14,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/image"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="HardcodedText"
-        tools:layout_editor_absoluteY="63dp" />
+        tools:ignore="HardcodedText" />
 
     <Toolbar
         android:id="@+id/toolbar_top"
@@ -26,25 +25,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <TextView
-        android:id="@+id/welcome_text"
-        android:layout_width="300sp"
-        android:layout_height="80sp"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="155dp"
-        android:text="Hello! Register to get started"
-        android:textColor="@color/white"
-        android:textSize="30sp"
+    <Button
+        android:text="."
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginStart="25dp"
+        android:background="@drawable/rounded_button"
+        android:paddingStart="13dp"
+        android:drawableLeft="@drawable/back_arrow"
+        app:backgroundTint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText,TextSizeCheck"
-        android:layout_marginBottom="100dp"/>
+        tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Hi there, Register to get started! "
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="170dp"
+        android:paddingHorizontal="20dp"/>
 
     <EditText
         android:id="@+id/register_email"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginHorizontal="40dp"
+        android:maxWidth="320dp"
         android:background="@android:color/white"
         android:hint="studentnumber@ul.ie"
         android:inputType="textEmailAddress"
@@ -54,13 +70,14 @@
         app:layout_constraintTop_toBottomOf="@id/welcome_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="80dp"/>
+        android:layout_marginTop="50dp"/>
 
     <EditText
         android:id="@+id/register_password"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginHorizontal="40dp"
+        android:maxWidth="320dp"
         android:background="@android:color/white"
         android:hint="Password"
         android:inputType="textPassword"
@@ -77,6 +94,8 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="10dp"
+        android:maxWidth="320dp"
         android:background="@android:color/white"
         android:hint="Confirm your password"
         android:inputType="textPassword"
@@ -85,34 +104,53 @@
         android:textColorHint="@color/grey"
         app:layout_constraintTop_toBottomOf="@+id/register_password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <Button
         android:id="@+id/register_submit"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginHorizontal="40dp"
-        android:backgroundTint="@color/green"
         android:text="Register"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="525dp"
+        android:background="@drawable/rounded_button"
+        app:backgroundTint="@color/green"
         app:layout_constraintTop_toBottomOf="@+id/register_confirm_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="60dp"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/login_now"
-        android:layout_width="300sp"
-        android:layout_height="80sp"
-        android:layout_marginHorizontal="40dp"
-        android:text="Already have an account? Login now."
+        android:id="@+id/login_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:text="Already have an account?"
         android:textColor="@color/white"
         android:textSize="15sp"
         app:layout_constraintTop_toBottomOf="@+id/register_submit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="HardcodedText,TextSizeCheck"
-        android:layout_marginTop="25dp"/>
+        tools:ignore="HardcodedText,TextSizeCheck" />
+
+    <TextView
+        android:id="@+id/login_now_link"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="20dp"
+        android:text="Login Now"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:textColorLink="@color/blue"
+        app:layout_constraintTop_toBottomOf="@+id/login_question"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="HardcodedText,TextSizeCheck" />
+
 
     <Toolbar
         android:id="@+id/toolbar_bottom"
