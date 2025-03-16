@@ -20,8 +20,8 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
     private AlertAdapter adapter;
     private Alerts alertsDb;
     private Button clearReadAlertsButton;
-    // TODO: Get actual user ID from session/preferences
-    private final int userId = 1; // Temporary user ID
+    // TODO: Get the actual user ID of user using the app
+    private final int userId = 1; // Temp UserID
 
     public AlertsFragment() {
         super(R.layout.fragment_alerts);
@@ -77,7 +77,7 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
             Toast.makeText(requireContext(), 
                 "Cleared " + deletedCount + " read alerts", 
                 Toast.LENGTH_SHORT).show();
-            loadAlerts(); // Refresh the list
+            loadAlerts();
         } else {
             Toast.makeText(requireContext(), 
                 "No read alerts to clear", 
