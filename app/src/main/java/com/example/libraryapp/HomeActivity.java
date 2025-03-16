@@ -92,7 +92,6 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
             return true;
         });
 
-        // Set initial fragment
         selectFragment(new HomeFragment());
     }
 
