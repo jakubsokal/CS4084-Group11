@@ -79,8 +79,8 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
                 //add contact fragment here
             } else {
                 //goes back to main screen.
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
+                Intent mainIntent = new Intent(this, MainActivity.class);
+                startActivity(mainIntent);
                 finish();
             }
 
@@ -89,10 +89,10 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);
-
             return true;
         });
 
+        // Set initial fragment
         selectFragment(new HomeFragment());
     }
 

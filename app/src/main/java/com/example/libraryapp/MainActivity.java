@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         Users s = new Users(this);
+
         Button login = findViewById(R.id.login);
         login.setOnClickListener(click -> {
             new Animation().animateButtonTint(click);

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    >
+    android:background="@color/green">
 
     <ImageView
         android:id="@+id/background"
@@ -40,18 +40,33 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />
 
-    <Button
-        android:id="@+id/login"
-        android:text="Login"
-        android:layout_width="300dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="586dp"
-        android:background="@drawable/rounded_button"
-        app:backgroundTint="@color/green"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Welcome to UL Library"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="170dp"
+        android:paddingHorizontal="20dp"/>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textColor="@color/green"
+        android:backgroundTint="@color/white"
+        android:layout_marginHorizontal="40dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/welcome_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/register"
