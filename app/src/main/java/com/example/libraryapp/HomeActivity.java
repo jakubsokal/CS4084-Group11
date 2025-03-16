@@ -79,8 +79,8 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
                 //add contact fragment here
             } else {
                 //goes back to main screen.
-                Intent mainIntent = new Intent(this, MainActivity.class);
-                startActivity(mainIntent);
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 finish();
             }
 
