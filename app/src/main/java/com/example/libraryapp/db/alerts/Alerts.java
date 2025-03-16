@@ -44,7 +44,6 @@ public class Alerts extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Helper method to create a new alert
     public long createAlert(SQLiteDatabase db, int userId, String message, String alertType) {
         ContentValues values = new ContentValues();
         values.put(COL_2, userId);
@@ -54,28 +53,24 @@ public class Alerts extends SQLiteOpenHelper {
         return db.insert(TABLE_NAME, null, values);
     }
 
-    // Helper method to mark an alert as read
     public void markAlertAsRead(SQLiteDatabase db, int alertId) {
         ContentValues values = new ContentValues();
         values.put(COL_5, 1);
         db.update(TABLE_NAME, values, COL_1 + " = ?", new String[]{String.valueOf(alertId)});
     }
 
-    // Helper method to get all alerts for a user
     public String getAllAlertsForUser(SQLiteDatabase db, int userId) {
         return "SELECT * FROM " + TABLE_NAME + 
             " WHERE " + COL_2 + " = " + userId + 
             " ORDER BY " + COL_6 + " DESC";
     }
 
-    // Helper method to get unread alerts count for a user
     public String getUnreadAlertsCountForUser(SQLiteDatabase db, int userId) {
         return "SELECT COUNT(*) FROM " + TABLE_NAME + 
             " WHERE " + COL_2 + " = " + userId + 
             " AND " + COL_5 + " = 0";
     }
 
-    // Helper method to delete read alerts for a user
     public int deleteReadAlerts(SQLiteDatabase db, int userId) {
         String whereClause = COL_2 + " = ? AND " + COL_5 + " = 1";
         String[] whereArgs = {String.valueOf(userId)};
