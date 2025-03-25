@@ -33,7 +33,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         holder.timeText.setText("Time: " + booking.getTime());
         holder.durationText.setText("Duration: " + booking.getDuration());
 
-
         holder.edit_button.setOnClickListener(v -> {
 
         });

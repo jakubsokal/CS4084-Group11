@@ -14,6 +14,7 @@ public class Booking {
         this.time = time;
         this.duration = duration;
     }
+
     public String getFloor() { return floor; }
     public String getDate() { return date; }
     public String getSeat() { return seat; }
