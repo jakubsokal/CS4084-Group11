@@ -16,7 +16,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     public BookingAdapter(List<Booking> bookingList) {
         this.bookingList = bookingList;
     }
-
     @NonNull
     @Override
     public BookingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -23,7 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="8dp">
 
-        <!--dropdown menu for filtering the bookings showed-->
+        <!--dropdown menu for filtering the bookings showed -->
         <Spinner
             android:id="@+id/filterSpinner"
             android:backgroundTint="@color/white"

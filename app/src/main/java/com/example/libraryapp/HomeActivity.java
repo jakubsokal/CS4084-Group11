@@ -27,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.navbar_book) {
                 //add fragment here
             } else if (item.getItemId() == R.id.navbar_manage) {
-                selectedFragment = new ManageFragment();
+                selectedFragment = new ManageFragment(); //added managebooking fragment
             }else{
                 //add alert fragment here
             }

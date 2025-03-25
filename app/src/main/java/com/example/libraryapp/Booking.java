@@ -6,7 +6,6 @@ public class Booking {
     private String room;
     private String time;
     private String duration;
-
     public Booking(String floor, String date, String seat, String room, String time, String duration) {
         this.floor = floor;
         this.date = date;
