@@ -32,8 +32,8 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
                 selectedFragment = new BookingFragment();
             } else if (item.getItemId() == R.id.navbar_manage) {
                 //add fragment here
-            } else {
-                //add alert fragment here
+            } else if (item.getItemId() == R.id.navbar_alert) {
+                selectedFragment = new AlertsFragment();
             }
 
             if(selectedFragment != null) {
@@ -71,13 +71,13 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
                 selectedFragment = new BookingFragment();
             } else if (click.getItemId() == R.id.menu_manage) {
                 //add fragment here
-            }else if (click.getItemId() == R.id.menu_alerts){
-                //add alert fragment here
-            }else if (click.getItemId() == R.id.menu_account){
+            } else if (click.getItemId() == R.id.menu_alerts) {
+                selectedFragment = new AlertsFragment();
+            } else if (click.getItemId() == R.id.menu_account) {
                 //add account fragment here
-            }else if (click.getItemId() == R.id.menu_contact){
+            } else if (click.getItemId() == R.id.menu_contact) {
                 //add contact fragment here
-            }else {
+            } else {
                 //goes back to main screen.
                 Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
@@ -89,7 +89,6 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
             }
 
             drawerLayout.closeDrawer(GravityCompat.START);
-
             return true;
         });
 
