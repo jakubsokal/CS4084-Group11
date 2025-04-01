@@ -31,7 +31,7 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
             } else if (item.getItemId() == R.id.navbar_book) {
                 selectedFragment = new BookingFragment();
             } else if (item.getItemId() == R.id.navbar_manage) {
-                //add fragment here
+                selectedFragment = new ManageFragment();
             } else if (item.getItemId() == R.id.navbar_alert) {
                 selectedFragment = new AlertsFragment();
             }

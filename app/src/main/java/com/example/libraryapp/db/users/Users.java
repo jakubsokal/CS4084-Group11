@@ -1,8 +1,11 @@
 package com.example.libraryapp.db.users;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 import com.example.libraryapp.db.Encryption;
 
@@ -48,6 +51,14 @@ public class Users extends SQLiteOpenHelper {
                 + COL_2 + ", "
                 + COL_3 + ")" +
                 "VALUES('tester@ul.ie', '" +  password + "' )";
+        Cursor cursor = db.rawQuery("SELECT * FROM users", null);
+        if (cursor.moveToFirst()) {
+            String storedEmail = cursor.getString(1);
+            String storedPassword = cursor.getString(2);
+            Log.d("DB_TEST", "Email: " + storedEmail + " Password: " + storedPassword);
+        }
+        cursor.close();
+
 
         db.execSQL(insert);
     }
@@ -56,5 +67,26 @@ public class Users extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
+    }
+
+    public boolean verifyUser(String email, String enteredPassword) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        //gets stored email and hashed password from db
+        Cursor cursor = db.rawQuery("SELECT " + COL_3 + " FROM " + TABLE_NAME + " WHERE " + COL_2 + " = ?", new String[]{email});
+
+        if (cursor.moveToFirst()) {
+            String storedHash = cursor.getString(0);
+
+            // encrypts entered password and comapres it to the one thats stored in db
+            Encryption encryption = new Encryption();
+            if (encryption.verify(enteredPassword, storedHash)) {
+                cursor.close();
+                db.close();
+                return true; // Password is correct
+            }
+        }
+        cursor.close();
+        db.close();
+        return false; // incorrect
     }
 }
