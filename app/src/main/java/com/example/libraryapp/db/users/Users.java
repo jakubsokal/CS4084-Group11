@@ -1,5 +1,6 @@
 package com.example.libraryapp.db.users;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -68,6 +69,22 @@ public class Users extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+
+    public boolean registerUser(String email, String enteredPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Encryption encryption = new Encryption();
+        String hashedPassword = encryption.encrypt(enteredPassword);
+
+        ContentValues values = new ContentValues();
+        values.put("email", email);
+        values.put("password", hashedPassword);
+
+        long result = db.insert("users", null, values);
+        db.close();
+        return result != -1;
+    }
+
 
     public boolean verifyUser(String email, String enteredPassword) {
         SQLiteDatabase db = this.getReadableDatabase();
