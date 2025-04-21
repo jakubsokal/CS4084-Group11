@@ -17,8 +17,9 @@ import java.util.Locale;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "library.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String TAG = "DatabaseHelper";
+    private final Encryption encryption;
 
     private static final String TABLE_USERS = "users";
     private static final String TABLE_BOOKINGS = "bookings";
@@ -44,6 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         Log.d(TAG, "DatabaseHelper constructor called with version: " + DATABASE_VERSION);
+        encryption = new Encryption();
     }
 
     @Override
@@ -87,7 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             
             ContentValues userValues = new ContentValues();
             userValues.put(COLUMN_EMAIL, "tester@ul.ie");
-            userValues.put(COLUMN_PASSWORD, "tester123");
+            userValues.put(COLUMN_PASSWORD, encryption.encrypt("tester123"));
             userValues.put(COLUMN_NAME, "Test User");
             long userId = db.insert(TABLE_USERS, null, userValues);
             Log.d(TAG, "Inserted test user with ID: " + userId);
@@ -126,21 +128,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(TAG, "Verifying user: " + email);
         SQLiteDatabase db = this.getReadableDatabase();
         try {
-            String[] columns = {COLUMN_ID};
-            String selection = COLUMN_EMAIL + " = ? AND " + COLUMN_PASSWORD + " = ?";
-            String[] selectionArgs = {email, password};
+            String[] columns = {COLUMN_ID, COLUMN_PASSWORD};
+            String selection = COLUMN_EMAIL + " = ?";
+            String[] selectionArgs = {email};
             
             Log.d(TAG, "Querying users table with email: " + email);
             Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
             
-            boolean exists = cursor.getCount() > 0;
-            Log.d(TAG, "User verification result: " + exists + ", found " + cursor.getCount() + " matching users");
-            
+            boolean exists = false;
             if (cursor.moveToFirst()) {
-                int userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID));
-                Log.d(TAG, "Found user with ID: " + userId);
+                String storedHash = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD));
+                exists = encryption.verify(password, storedHash);
+                Log.d(TAG, "Password verification result: " + exists);
             }
             
+            Log.d(TAG, "User verification result: " + exists + ", found " + cursor.getCount() + " matching users");
             cursor.close();
             return exists;
         } catch (Exception e) {
@@ -162,6 +164,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         return userId;
+    }
+
+    public boolean registerUser(String email, String password, String name) {
+        Log.d(TAG, "registerUser called for email: " + email);
+        SQLiteDatabase db = this.getWritableDatabase();
+        try {
+            String[] columns = {COLUMN_ID};
+            String selection = COLUMN_EMAIL + " = ?";
+            String[] selectionArgs = {email};
+            Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
+            
+            if (cursor.getCount() > 0) {
+                Log.d(TAG, "Email already exists: " + email);
+                cursor.close();
+                return false;
+            }
+            cursor.close();
+            Log.d(TAG, "Email is available, proceeding with registration");
+
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_EMAIL, email);
+            String encryptedPassword = encryption.encrypt(password);
+            Log.d(TAG, "Password encrypted successfully");
+            values.put(COLUMN_PASSWORD, encryptedPassword);
+            values.put(COLUMN_NAME, name);
+
+            long result = db.insert(TABLE_USERS, null, values);
+            Log.d(TAG, "User registration result: " + (result != -1 ? "success" : "failed"));
+            return result != -1;
+        } catch (Exception e) {
+            Log.e(TAG, "Error registering user: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public String getAllAlertsForUser(SQLiteDatabase db, int userId) {

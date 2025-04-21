@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.libraryapp.db.DatabaseHelper;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +20,13 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
     private RecyclerView alertsRecyclerView;
     private AlertAdapter adapter;
     private DatabaseHelper dbHelper;
-    private Button clearReadAlertsButton;
+    private ChipGroup filterChipGroup;
     private int userId;
+    private List<AlertItem> allAlerts = new ArrayList<>();
+    private static final String FILTER_ALL = "all";
+    private static final String FILTER_UNREAD = "unread";
+    private static final String FILTER_READ = "read";
+    private String currentFilter = FILTER_ALL;
 
     public AlertsFragment() {
         super(R.layout.fragment_alerts);
@@ -40,16 +46,28 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
         }
         
         alertsRecyclerView = view.findViewById(R.id.alertsRecyclerView);
-        clearReadAlertsButton = view.findViewById(R.id.clearReadAlertsButton);
+        filterChipGroup = view.findViewById(R.id.filterChipGroup);
         alertsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         
         dbHelper = new DatabaseHelper(requireContext());
         adapter = new AlertAdapter(new ArrayList<>(), this);
         alertsRecyclerView.setAdapter(adapter);
         
-        clearReadAlertsButton.setOnClickListener(v -> clearReadAlerts());
-        
+        setupFilterChips();
         loadAlerts();
+    }
+
+    private void setupFilterChips() {
+        filterChipGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.allChip) {
+                currentFilter = FILTER_ALL;
+            } else if (checkedId == R.id.unreadChip) {
+                currentFilter = FILTER_UNREAD;
+            } else if (checkedId == R.id.readChip) {
+                currentFilter = FILTER_READ;
+            }
+            applyFilter();
+        });
     }
 
     private void loadAlerts() {
@@ -57,7 +75,7 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
         String query = dbHelper.getAllAlertsForUser(db, userId);
         
         Cursor cursor = db.rawQuery(query, null);
-        List<AlertItem> alerts = new ArrayList<>();
+        allAlerts.clear();
         
         if (cursor.moveToFirst()) {
             do {
@@ -69,28 +87,24 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
                     cursor.getInt(cursor.getColumnIndexOrThrow("status")) == 1,
                     cursor.getString(cursor.getColumnIndexOrThrow("createdAt"))
                 );
-                alerts.add(alert);
+                allAlerts.add(alert);
             } while (cursor.moveToNext());
         }
         
         cursor.close();
-        adapter.updateAlerts(alerts);
+        applyFilter();
     }
 
-    private void clearReadAlerts() {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        int deletedCount = dbHelper.deleteReadAlerts(db, userId);
-        
-        if (deletedCount > 0) {
-            Toast.makeText(requireContext(), 
-                "Cleared " + deletedCount + " read alerts", 
-                Toast.LENGTH_SHORT).show();
-            loadAlerts();
-        } else {
-            Toast.makeText(requireContext(), 
-                "No read alerts to clear", 
-                Toast.LENGTH_SHORT).show();
+    private void applyFilter() {
+        List<AlertItem> filteredAlerts = new ArrayList<>();
+        for (AlertItem alert : allAlerts) {
+            if (currentFilter.equals(FILTER_ALL) ||
+                (currentFilter.equals(FILTER_READ) && alert.isRead()) ||
+                (currentFilter.equals(FILTER_UNREAD) && !alert.isRead())) {
+                filteredAlerts.add(alert);
+            }
         }
+        adapter.updateAlerts(filteredAlerts);
     }
 
     @Override
@@ -99,7 +113,7 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             dbHelper.markAlertAsRead(db, alert.getAlertId());
             alert.setRead(true);
-            adapter.notifyDataSetChanged();
+            applyFilter();
         }
     }
 
