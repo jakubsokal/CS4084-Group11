@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.text.ParseException;
@@ -30,44 +31,39 @@ public class ManageFragment extends Fragment {
     private Spinner filterSpinner;
     public ManageFragment() {
         super(R.layout.fragment_manage_booking);
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_manage_booking, container, false);
+
         recyclerView = view.findViewById(R.id.recyclerViewBookings);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        //drop down mneu for upcoming and history
-        Spinner filterSpinner =view.findViewById((R.id.filterSpinner));
-        String[] filterOptions = {"All", "Upcoming", "History"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, filterOptions);
-        filterSpinner.setAdapter(adapter);
-        //the real thing will take booking from db
-        bookingList = new ArrayList<>();
-        bookingList.add(new Booking("2nd Floor", "12/03/2025", "Seat 14", "Room A1", "10:00 AM", "2 hours"));
-        bookingList.add(new Booking("1st Floor", "13/03/2025", "Seat 20", "Room B3", "12:00 PM", "1 hour"));
-        bookingList.add(new Booking("3rd Floor", "24/03/2025", "Seat 5", "Room C2", "2:00 PM", "2 hours"));
+        //Booked booked= new Booked(getContext());
+        //bookingList = booked.getAllBookings() ;
+        //
 
-        currentBookings = new ArrayList<>(bookingList);
-        bookingAdapter = new BookingAdapter(currentBookings);
-        recyclerView.setAdapter(bookingAdapter);
+        // Set up filter spinner
+        filterSpinner = view.findViewById(R.id.filterSpinner);
+        String[] filterOptions = {"All", "Upcoming", "History"};
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, filterOptions);
+        filterSpinner.setAdapter(spinnerAdapter);
 
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            //filters based on selection upcoming,history or all
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedFilter = filterOptions[position];
                 filterBookings(selectedFilter);
             }
 
-            //all are displayed as default
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                filterBookings("All");  // Default to all bookings
+                filterBookings("All");
             }
         });
+
         return view;
     }
-    //diplays the entire list of bookings if no filter is selected,else filters based on the date
     private void filterBookings(String filterType) {
         currentBookings.clear();
         if (filterType.equals("All")) {
@@ -106,5 +102,4 @@ public class ManageFragment extends Fragment {
         }
         return false;
     }
-
 }

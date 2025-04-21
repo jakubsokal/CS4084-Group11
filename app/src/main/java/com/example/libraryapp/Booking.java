@@ -1,24 +1,27 @@
 package com.example.libraryapp;
+
+//changing fields to match whats in db
 public class Booking {
-    private String floor;
+    private int id;
     private String date;
-    private String seat;
-    private String room;
     private String time;
-    private String duration;
-    public Booking(String floor, String date, String seat, String room, String time, String duration) {
-        this.floor = floor;
+    private String floor;
+    private String table;
+    private String seat;
+
+    public Booking(int id, String date, String time, String floor, String table, String seat){
+        this.id = id;
         this.date = date;
-        this.seat = seat;
-        this.room = room;
         this.time = time;
-        this.duration = duration;
+        this.floor = floor;
+        this.table = table;
+        this.seat = seat;
     }
 
-    public String getFloor() { return floor; }
+    public int getId() { return id; }
     public String getDate() { return date; }
-    public String getSeat() { return seat; }
-    public String getRoom() { return room; }
     public String getTime() { return time; }
-    public String getDuration() { return duration; }
+    public String getFloor() { return floor; }
+    public String getTable() { return table; }
+    public String getSeat() { return seat; }
 }

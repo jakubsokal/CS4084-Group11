@@ -1,69 +1,52 @@
 package com.example.libraryapp.db.booked;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import androidx.annotation.Nullable;
 
-public class Booked extends SQLiteOpenHelper {
-    private static final String DB_NAME = "libraryapp.db";
+import com.example.libraryapp.Booking;
+import com.example.libraryapp.db.DatabaseHelper;
 
-    private static final int DB_VERSION = 1;
+import java.util.ArrayList;
+import java.util.List;
 
-    private static final String TABLE_NAME = "booked";
+public class Booked {
 
-    private static final String COL_1 = "book_id";
+    private final SQLiteDatabase db;
 
-    private static final String COL_2 = "user_id";
-
-    private static final String COL_3 = "floor_id";
-
-    private static final String COL_4 = "room_id";
-
-    private static final String COL_5 = "seat_id";
-
-    private static final String COL_6 = "table_id";
-
-    private static final String COL_7 = "date";
-
-    private static final String COL_8 = "start_time";
-
-    private static final String COL_9 = "end_time";
-
-    private static final String COL_10 = "status"; // 1 = cancelled, 0 = booked
-
-    private static final String COL_11 = "created_on";
-
-    public Booked(@Nullable Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+    public Booked(Context context) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        db = dbHelper.getReadableDatabase();
     }
 
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        String queryBook = "CREATE TABLE IF NOT EXISTS "+ TABLE_NAME+ " (\n" +
-                COL_1 + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
-                COL_2 + " INTEGER, \n" +
-                COL_3 + " INTEGER,\n" +
-                COL_4 + " INTEGER,\n" +
-                COL_5 + " INTEGER,\n" +
-                COL_6 + " INTEGER," +
-                COL_7 + " TEXT,\n" +
-                COL_8 + " TEXT,\n" +
-                COL_9 + " TEXT,\n" +
-                COL_10 + " INTEGER,\n" +
-                COL_11 + " TEXT DEFAULT CURRENT_DATE,\n" +
-                "FOREIGN KEY("+ COL_2 +") REFERENCES users(user_id),\n"+
-                "FOREIGN KEY("+ COL_3 +") REFERENCES floors(floor_id),\n" +
-                "FOREIGN KEY("+ COL_4 +") REFERENCES rooms(room_id),\n" +
-                "FOREIGN KEY("+ COL_5 +") REFERENCES seats(seat_id),\n" +
-                "FOREIGN KEY("+ COL_6 +") REFERENCES tables(table_id))";
+    public List<Booking> getAllBookings() {
+        List<Booking> bookingList = new ArrayList<>();
 
-        db.execSQL(queryBook);
-    }
+        String query = "SELECT " +
+                "b.book_id, b.date, b.start_time, " +
+                "b.floor_id AS floor, " +
+                "b.room_id AS room, " +
+                "b.seat_id AS seat, " +
+                "b.table_id AS table_name " +
+                "FROM booked b";
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndexOrThrow("book_id"));
+                String date = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+                String time = cursor.getString(cursor.getColumnIndexOrThrow("start_time"));
+                String floor = cursor.getString(cursor.getColumnIndexOrThrow("floor"));
+                String table = cursor.getString(cursor.getColumnIndexOrThrow("table_name"));
+                String seat = cursor.getString(cursor.getColumnIndexOrThrow("seat"));
+
+                Booking booking = new Booking(id, date, time, floor, table, seat);
+                bookingList.add(booking);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return bookingList;
     }
 }

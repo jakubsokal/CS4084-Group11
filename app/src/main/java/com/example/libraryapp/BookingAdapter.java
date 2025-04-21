@@ -26,21 +26,22 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     @Override
     public void onBindViewHolder(@NonNull BookingViewHolder holder, int position) {
         Booking booking = bookingList.get(position);
-        holder.floorText.setText("Floor: " + booking.getFloor());
+        holder.idText.setText("Booking ID: " + booking.getId());
         holder.dateText.setText("Date: " + booking.getDate());
-        holder.seatText.setText("Seat: " + booking.getSeat());
-        holder.roomText.setText("Room: " + booking.getRoom());
         holder.timeText.setText("Time: " + booking.getTime());
-        holder.durationText.setText("Duration: " + booking.getDuration());
+        holder.floorText.setText("Floor: " + booking.getFloor());
+        holder.tableText.setText("Table: " + booking.getTable());
+        holder.seatText.setText("Seat: " + booking.getSeat());
 
         holder.edit_button.setOnClickListener(v -> {
-
+            // edit logic here
         });
 
         holder.cancel_button.setOnClickListener(v -> {
-            // will remove the booking from db when implemeted
+            // delete logic here
         });
     }
+
 
     @Override
     public int getItemCount() {
@@ -48,17 +49,18 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     }
 
     public static class BookingViewHolder extends RecyclerView.ViewHolder {
-        TextView floorText, dateText, seatText, roomText, timeText, durationText;
+        TextView idText,floorText, dateText, seatText, roomText, timeText, tableText;
         Button edit_button, cancel_button;
 
         public BookingViewHolder(View itemView) {
             super(itemView);
+            idText = itemView.findViewById(R.id.idText);
             floorText = itemView.findViewById(R.id.floorText);
             dateText = itemView.findViewById(R.id.dateText);
             seatText = itemView.findViewById(R.id.seatText);
             roomText = itemView.findViewById(R.id.roomText);
             timeText = itemView.findViewById(R.id.timeText);
-            durationText = itemView.findViewById(R.id.durationText);
+            tableText = itemView.findViewById(R.id.tableText);
             edit_button = itemView.findViewById(R.id.edit_button);
             cancel_button = itemView.findViewById(R.id.cancel_button);
         }

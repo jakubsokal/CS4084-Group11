@@ -31,7 +31,7 @@ public class BookingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         dateTextView = view.findViewById(R.id.dateTextView);
         timeTextView = view.findViewById(R.id.timeTextView);
         floorSpinner = view.findViewById(R.id.floorSpinner);
@@ -88,31 +88,31 @@ public class BookingFragment extends Fragment {
     private void setupSpinners() {
         String[] floors = {"Ground Floor", "First Floor", "Second Floor", "Third Floor"};
         ArrayAdapter<String> floorAdapter = new ArrayAdapter<>(requireContext(),
-            android.R.layout.simple_spinner_item, floors);
+                android.R.layout.simple_spinner_item, floors);
         floorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         floorSpinner.setAdapter(floorAdapter);
 
         String[] tables = {"Table 1", "Table 2", "Table 3", "Table 4", "Table 5"};
         ArrayAdapter<String> tableAdapter = new ArrayAdapter<>(requireContext(),
-            android.R.layout.simple_spinner_item, tables);
+                android.R.layout.simple_spinner_item, tables);
         tableAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         tableSpinner.setAdapter(tableAdapter);
 
         String[] seats = {"Seat 1", "Seat 2", "Seat 3", "Seat 4"};
         ArrayAdapter<String> seatAdapter = new ArrayAdapter<>(requireContext(),
-            android.R.layout.simple_spinner_item, seats);
+                android.R.layout.simple_spinner_item, seats);
         seatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         seatSpinner.setAdapter(seatAdapter);
     }
 
     private void handleBooking() {
         String bookingDetails = String.format("Booking confirmed for %s at %s, %s, %s, %s",
-            dateTextView.getText(),
-            timeTextView.getText(),
-            floorSpinner.getSelectedItem(),
-            tableSpinner.getSelectedItem(),
-            seatSpinner.getSelectedItem()
+                dateTextView.getText(),
+                timeTextView.getText(),
+                floorSpinner.getSelectedItem(),
+                tableSpinner.getSelectedItem(),
+                seatSpinner.getSelectedItem()
         );
         Toast.makeText(requireContext(), bookingDetails, Toast.LENGTH_LONG).show();
     }
-} 
+}

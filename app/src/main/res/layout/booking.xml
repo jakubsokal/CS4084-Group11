@@ -13,6 +13,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+        <TextView
+            android:id="@+id/idText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Id: " />
 
         <TextView
             android:id="@+id/floorText"
@@ -46,11 +51,11 @@
             android:text="Time: " />
 
         <TextView
-            android:id="@+id/durationText"
+            android:id="@+id/tableText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Duration: " />
-
+            android:text="Table: "
+            android:textStyle="bold"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

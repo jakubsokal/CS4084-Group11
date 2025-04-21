@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.libraryapp.db.users.Users;
+
+import com.example.libraryapp.db.DatabaseHelper;
+
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -13,7 +15,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        Users s = new Users(this); //TESTING PURPOSE
+        // This triggers onCreate in DatabaseHelper
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        dbHelper.getWritableDatabase();
         Button login = findViewById(R.id.login);
         login.setOnClickListener(click -> {
             new Animation().animateButtonTint(click);
