@@ -11,17 +11,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.libraryapp.db.alerts.Alerts;
+import com.example.libraryapp.db.DatabaseHelper;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClickListener {
     private RecyclerView alertsRecyclerView;
     private AlertAdapter adapter;
-    private Alerts alertsDb;
+    private DatabaseHelper dbHelper;
     private Button clearReadAlertsButton;
-    // TODO: Get the actual user ID of user using the app
-    private final int userId = 1; // Temp UserID
+    private int userId;
 
     public AlertsFragment() {
         super(R.layout.fragment_alerts);
@@ -31,11 +30,20 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         
+        Bundle args = getArguments();
+        if (args != null) {
+            userId = args.getInt("userId", -1);
+            if (userId == -1) {
+                Toast.makeText(requireContext(), "Error: User not found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        
         alertsRecyclerView = view.findViewById(R.id.alertsRecyclerView);
         clearReadAlertsButton = view.findViewById(R.id.clearReadAlertsButton);
         alertsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         
-        alertsDb = new Alerts(requireContext());
+        dbHelper = new DatabaseHelper(requireContext());
         adapter = new AlertAdapter(new ArrayList<>(), this);
         alertsRecyclerView.setAdapter(adapter);
         
@@ -45,8 +53,8 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
     }
 
     private void loadAlerts() {
-        SQLiteDatabase db = alertsDb.getReadableDatabase();
-        String query = alertsDb.getAllAlertsForUser(db, userId);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = dbHelper.getAllAlertsForUser(db, userId);
         
         Cursor cursor = db.rawQuery(query, null);
         List<AlertItem> alerts = new ArrayList<>();
@@ -54,7 +62,7 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
         if (cursor.moveToFirst()) {
             do {
                 AlertItem alert = new AlertItem(
-                    cursor.getInt(cursor.getColumnIndexOrThrow("alertId")),
+                    cursor.getInt(cursor.getColumnIndexOrThrow("id")),
                     cursor.getInt(cursor.getColumnIndexOrThrow("userId")),
                     cursor.getString(cursor.getColumnIndexOrThrow("message")),
                     cursor.getString(cursor.getColumnIndexOrThrow("alertType")),
@@ -70,8 +78,8 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
     }
 
     private void clearReadAlerts() {
-        SQLiteDatabase db = alertsDb.getWritableDatabase();
-        int deletedCount = alertsDb.deleteReadAlerts(db, userId);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int deletedCount = dbHelper.deleteReadAlerts(db, userId);
         
         if (deletedCount > 0) {
             Toast.makeText(requireContext(), 
@@ -88,8 +96,8 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
     @Override
     public void onAlertClick(AlertItem alert) {
         if (!alert.isRead()) {
-            SQLiteDatabase db = alertsDb.getWritableDatabase();
-            alertsDb.markAlertAsRead(db, alert.getAlertId());
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            dbHelper.markAlertAsRead(db, alert.getAlertId());
             alert.setRead(true);
             adapter.notifyDataSetChanged();
         }
@@ -98,8 +106,8 @@ public class AlertsFragment extends Fragment implements AlertAdapter.OnAlertClic
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (alertsDb != null) {
-            alertsDb.close();
+        if (dbHelper != null) {
+            dbHelper.close();
         }
     }
 } 
