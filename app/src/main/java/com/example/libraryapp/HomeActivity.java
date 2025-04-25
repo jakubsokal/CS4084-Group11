@@ -12,15 +12,26 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.example.libraryapp.db.DatabaseHelper;
 
 public class HomeActivity extends AppCompatActivity implements INavbar {
     private BottomNavigationView bottomNav;
+    private DatabaseHelper dbHelper;
+    private int userId;
+    private Animation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
+        
+        String userEmail = getIntent().getStringExtra("email");
+        dbHelper = new DatabaseHelper(this);
+        userId = dbHelper.getUserIdByEmail(userEmail);
+        
+        animation = new Animation();
+        
         bottomNav = findViewById(R.id.bottom_navigation);
 
         bottomNav.setOnItemSelectedListener(item -> {
@@ -33,7 +44,11 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
             } else if (item.getItemId() == R.id.navbar_manage) {
                 selectedFragment = new ManageFragment();
             } else if (item.getItemId() == R.id.navbar_alert) {
-                selectedFragment = new AlertsFragment();
+                AlertsFragment alertsFragment = new AlertsFragment();
+                Bundle args = new Bundle();
+                args.putInt("userId", userId);
+                alertsFragment.setArguments(args);
+                selectedFragment = alertsFragment;
             }
 
             if(selectedFragment != null) {
@@ -70,9 +85,13 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
             } else if (click.getItemId() == R.id.menu_book) {
                 selectedFragment = new BookingFragment();
             } else if (click.getItemId() == R.id.menu_manage) {
-                //add fragment here
+                selectedFragment = new ManageFragment();
             } else if (click.getItemId() == R.id.menu_alerts) {
-                selectedFragment = new AlertsFragment();
+                AlertsFragment alertsFragment = new AlertsFragment();
+                Bundle args = new Bundle();
+                args.putInt("userId", userId);
+                alertsFragment.setArguments(args);
+                selectedFragment = alertsFragment;
             } else if (click.getItemId() == R.id.menu_account) {
                 //add account fragment here
             } else if (click.getItemId() == R.id.menu_contact) {
@@ -104,5 +123,13 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
     @Override
     public void bottomNavItemSelected(int itemId) {
         bottomNav.setSelectedItemId(itemId);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbHelper != null) {
+            dbHelper.close();
+        }
     }
 }

@@ -22,13 +22,35 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/clearReadAlertsButton"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/filterChipGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Clear Read"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/green"/>
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/allChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"
+                android:checked="true"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/unreadChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unread"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/readChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Read"
+                style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        </com.google.android.material.chip.ChipGroup>
 
     </LinearLayout>
 
