@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        //Users s = new Users(this); //TESTING PURPOSE
         Booked booked = new Booked(this);
         Button login = findViewById(R.id.login);
         login.setOnClickListener(click -> {
