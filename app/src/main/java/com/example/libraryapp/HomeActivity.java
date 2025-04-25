@@ -95,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
             } else if (click.getItemId() == R.id.menu_account) {
                 //add account fragment here
             } else if (click.getItemId() == R.id.menu_contact) {
-                //add contact fragment here
+                selectedFragment = new ContactFragment();
             } else {
                 //goes back to main screen.
                 Intent intent = new Intent(this, MainActivity.class);
