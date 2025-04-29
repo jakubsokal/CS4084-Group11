@@ -54,4 +54,11 @@ public class Booking {
     public boolean isCancelled() { return isCancelled; }
     public void setCancelled(boolean cancelled) { this.isCancelled = cancelled; }
     public int getDuration() { return duration; }
+    public void setFloorName(String floorName) { this.floorName = floorName; }
+    public void setRoomName(String roomName) { this.roomName = roomName; }
+    public void setSeatNumber(String seatNumber) { this.seatNumber = seatNumber; }
+    public void setTableNumber(String tableNumber) { this.tableNumber = tableNumber; }
+    public void setDate(String date) { this.date = date; }
+    public void setStartTime(String startTime) { this.startTime = startTime; }
+    public void setEndTime(String endTime) { this.endTime = endTime; }
 }
