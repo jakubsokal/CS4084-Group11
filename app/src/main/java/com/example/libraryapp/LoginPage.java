@@ -3,17 +3,22 @@ package com.example.libraryapp;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.example.libraryapp.db.DatabaseHelper;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class LoginPage extends AppCompatActivity {
     private EditText emailEditText, passwordEditText;
     private Button loginButton;
     private DatabaseHelper dbHelper;
+    private Button backButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +28,22 @@ public class LoginPage extends AppCompatActivity {
         passwordEditText = findViewById(R.id.enterpassword);
         loginButton = findViewById(R.id.loginbutton);
         dbHelper = new DatabaseHelper(this);
-
+        backButton = findViewById(R.id.back);
         loginButton.setOnClickListener(view -> handleLogin());
+        TextView forgotPassword = findViewById(R.id.forgotPassword);
+        forgotPassword.setOnClickListener(v -> {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, new ResetPasswordFragment());
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
+        backButton.setOnClickListener(v -> {
+            startActivity(new Intent(LoginPage.this, MainActivity.class));
+            finish();
+        });
     }
     private void handleLogin() {
-        String email = emailEditText.getText().toString().trim();
+        String email = emailEditText.getText().toString().trim().toLowerCase();
         String password = passwordEditText.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
@@ -52,4 +68,5 @@ public class LoginPage extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 }

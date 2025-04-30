@@ -32,17 +32,33 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
         android:fontFamily="@font/urbanist"
-        android:text="Welcome Back, It's good to see you again!"
+        android:text="Welcome Back!"
         android:textAlignment="center"
-        android:textColor="@color/white"
 
+        android:textColor="@color/white"
         android:textSize="30dp"
         app:layout_constraintBottom_toTopOf="@+id/email"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/back"
         app:layout_constraintTop_toTopOf="@+id/libraryimage"
-        app:layout_constraintVertical_bias="0.727" />
+        app:layout_constraintVertical_bias="0.586" />
+
+    <Button
+        android:text="."
+        android:id="@+id/back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="110dp"
+        android:layout_marginStart="25dp"
+        android:background="@drawable/rounded_button"
+        android:paddingStart="13dp"
+        android:drawableLeft="@drawable/back_arrow"
+        app:backgroundTint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+
 
     <EditText
         android:id="@+id/email"
@@ -55,9 +71,20 @@
         android:drawableStart="@drawable/email_icon"
         android:hint="Enter email address"
         android:padding="15dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintBottom_toBottomOf="@+id/loginbutton"
         app:layout_constraintBottom_toTopOf="@+id/enterpassword"
         app:layout_constraintEnd_toEndOf="parent" />
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/loginbutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
 
     <EditText
         android:id="@+id/enterpassword"
@@ -103,20 +130,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/libraryimage" />
 
-    <TextView
 
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:minHeight="48dp"
-        android:text="Dont have an account?Register"
-        android:textColor="@color/blue"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintTop_toBottomOf="@+id/loginbutton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
     <Toolbar
         android:id="@+id/navbar"
         android:layout_width="match_parent"
