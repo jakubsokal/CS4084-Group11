@@ -37,26 +37,26 @@ public class ManageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_manage_booking, container, false);
-        
+
         dbHelper = new DatabaseHelper(requireContext());
-        
+
         recyclerView = view.findViewById(R.id.recyclerViewBookings);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        
+
         bookingList = new ArrayList<>();
         currentBookings = new ArrayList<>();
-        
+
         bookingAdapter = new BookingAdapter(currentBookings);
         recyclerView.setAdapter(bookingAdapter);
-        
+
         filterSpinner = view.findViewById(R.id.filterSpinner);
         String[] filterOptions = {"All", "Upcoming", "History"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), 
-            android.R.layout.simple_spinner_dropdown_item, filterOptions);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item, filterOptions);
         filterSpinner.setAdapter(adapter);
-        
+
         loadBookings();
-        
+
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -69,20 +69,20 @@ public class ManageFragment extends Fragment {
                 filterBookings("All");
             }
         });
-        
+
         return view;
     }
 
     private void filterBookings(String filterType) {
         if (bookingAdapter == null) return;
-        
+
         currentBookings.clear();
         if (filterType.equals("All")) {
             currentBookings.addAll(bookingList);
         } else {
             for (Booking booking : bookingList) {
                 if ((filterType.equals("Upcoming") && isUpcoming(booking)) ||
-                    (filterType.equals("History") && isPast(booking))) {
+                        (filterType.equals("History") && isPast(booking))) {
                     currentBookings.add(booking);
                 }
             }
@@ -117,15 +117,15 @@ public class ManageFragment extends Fragment {
             bookingList = new ArrayList<>();
         }
         bookingList.clear();
-        
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
         int userId = prefs.getInt("user_id", -1);
-        
+
         if (userId == -1) {
             Log.e(TAG, "User ID not found in SharedPreferences");
             return;
         }
-        
+
         List<Booking> dbBookings = dbHelper.getBookingsForUser(userId);
         if (dbBookings != null) {
             bookingList.addAll(dbBookings);

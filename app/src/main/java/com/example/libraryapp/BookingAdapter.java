@@ -50,7 +50,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         holder.seatText.setText("Seat: " + booking.getSeatNumber());
         holder.roomText.setText("Room: " + booking.getRoomName());
         holder.timeText.setText("Time: " + booking.getStartTime() + " - " + booking.getEndTime());
-        
+
         String duration = calculateDuration(booking.getStartTime(), booking.getEndTime());
         holder.durationText.setText("Duration: " + duration);
 
@@ -271,15 +271,15 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
             Date start = sdf.parse(startTime);
             Date end = sdf.parse(endTime);
-            
+
             if (start != null && end != null) {
                 long diffInMillis = end.getTime() - start.getTime();
                 long diffInHours = diffInMillis / (60 * 60 * 1000);
                 long diffInMinutes = (diffInMillis / (60 * 1000)) % 60;
-                
+
                 if (diffInHours > 0) {
-                    return diffInHours + " hour" + (diffInHours > 1 ? "s" : "") + 
-                           (diffInMinutes > 0 ? " " + diffInMinutes + " minute" + (diffInMinutes > 1 ? "s" : "") : "");
+                    return diffInHours + " hour" + (diffInHours > 1 ? "s" : "") +
+                            (diffInMinutes > 0 ? " " + diffInMinutes + " minute" + (diffInMinutes > 1 ? "s" : "") : "");
                 } else {
                     return diffInMinutes + " minute" + (diffInMinutes > 1 ? "s" : "");
                 }

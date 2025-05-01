@@ -86,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.d(TAG, "Alerts table created successfully");
 
             Log.d(TAG, "All tables created successfully, inserting test data...");
-            
+
             ContentValues userValues = new ContentValues();
             userValues.put(COLUMN_EMAIL, "tester@ul.ie");
             userValues.put(COLUMN_PASSWORD, encryption.encrypt("tester123"));
@@ -107,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.d(TAG, "Inserted test booking with ID: " + bookingId);
 
             Log.d(TAG, "Database initialization completed");
-            
+
         } catch (Exception e) {
             Log.e(TAG, "Error creating database tables: " + e.getMessage());
             e.printStackTrace();
@@ -125,23 +125,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean verifyUser(String email, String password) {
-        Log.d(TAG, "Verifying user: " + email);
+        Log.d(TAG, "Verifying user: " + email.toLowerCase());
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             String[] columns = {COLUMN_ID, COLUMN_PASSWORD};
             String selection = COLUMN_EMAIL + " = ?";
-            String[] selectionArgs = {email};
-            
+            String[] selectionArgs = {email.toLowerCase()};
+
+
             Log.d(TAG, "Querying users table with email: " + email);
             Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
-            
+
             boolean exists = false;
             if (cursor.moveToFirst()) {
                 String storedHash = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PASSWORD));
                 exists = encryption.verify(password, storedHash);
                 Log.d(TAG, "Password verification result: " + exists);
             }
-            
+
             Log.d(TAG, "User verification result: " + exists + ", found " + cursor.getCount() + " matching users");
             cursor.close();
             return exists;
@@ -156,7 +157,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] columns = {COLUMN_ID};
         String selection = COLUMN_EMAIL + " = ?";
-        String[] selectionArgs = {email};
+        String[] selectionArgs = {email.toLowerCase()};
         Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
         int userId = -1;
         if (cursor.moveToFirst()) {
@@ -165,6 +166,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return userId;
     }
+    //forgotten password button will update the password for a specfic email
+    public boolean updatePasswordByEmail(String email, String newPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String hashedPassword = encryption.encrypt(newPassword); // Use the same method as during registration
+        values.put("password", hashedPassword);
+
+        int rowsAffected = db.update("users", values, "LOWER(email) = ?", new String[]{email.toLowerCase()});
+        return rowsAffected > 0;
+    }
+
 
     public boolean registerUser(String email, String password, String name) {
         Log.d(TAG, "registerUser called for email: " + email);
@@ -172,9 +184,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         try {
             String[] columns = {COLUMN_ID};
             String selection = COLUMN_EMAIL + " = ?";
-            String[] selectionArgs = {email};
+            String[] selectionArgs = {email.toLowerCase()};
             Cursor cursor = db.query(TABLE_USERS, columns, selection, selectionArgs, null, null, null);
-            
+
             if (cursor.getCount() > 0) {
                 Log.d(TAG, "Email already exists: " + email);
                 cursor.close();
@@ -184,7 +196,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.d(TAG, "Email is available, proceeding with registration");
 
             ContentValues values = new ContentValues();
-            values.put(COLUMN_EMAIL, email);
+            //insuring all emails will be stored in lowercase
+            values.put(COLUMN_EMAIL, email.toLowerCase());
             String encryptedPassword = encryption.encrypt(password);
             Log.d(TAG, "Password encrypted successfully");
             values.put(COLUMN_PASSWORD, encryptedPassword);
@@ -217,9 +230,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void createBookingAlert(SQLiteDatabase db, int userId, int bookingId, String alertType) {
         String message;
         String bookingDate = "";
-        
-        Cursor cursor = db.query(TABLE_BOOKINGS, new String[]{COLUMN_DATE}, COLUMN_ID + " = ?", 
-            new String[]{String.valueOf(bookingId)}, null, null, null);
+
+        Cursor cursor = db.query(TABLE_BOOKINGS, new String[]{COLUMN_DATE}, COLUMN_ID + " = ?",
+                new String[]{String.valueOf(bookingId)}, null, null, null);
         if (cursor.moveToFirst()) {
             bookingDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE));
         }
@@ -239,7 +252,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_ALERT_TYPE, alertType);
         values.put(COLUMN_STATUS, 0);
         values.put(COLUMN_CREATED_AT, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
-        
+
         db.insert(TABLE_ALERTS, null, values);
     }
 
@@ -247,7 +260,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         List<Booking> bookings = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String query = "SELECT * FROM " + TABLE_BOOKINGS + 
+        String query = "SELECT * FROM " + TABLE_BOOKINGS +
                 " WHERE " + COLUMN_USER_ID + " = ? AND " + COLUMN_IS_CANCELLED + " = 0 " +
                 " ORDER BY " + COLUMN_DATE + " DESC, " + COLUMN_START_TIME + " DESC";
 
@@ -256,21 +269,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 Booking booking = new Booking(
-                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FLOOR)),
-                    0,
-                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SEAT)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TABLE)),
-                    "Floor " + cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FLOOR)),
-                    "Room 1",
-                    "Seat " + cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SEAT)),
-                    "Table " + cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TABLE)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_TIME)),
-                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_TIME)),
-                    cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_CANCELLED)) == 1,
-                    60
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FLOOR)),
+                        0,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SEAT)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TABLE)),
+                        "Floor " + cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_FLOOR)),
+                        "Room 1",
+                        "Seat " + cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_SEAT)),
+                        "Table " + cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TABLE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_START_TIME)),
+                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_END_TIME)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_CANCELLED)) == 1,
+                        60
                 );
                 bookings.add(booking);
             } while (cursor.moveToNext());
@@ -284,7 +297,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_IS_CANCELLED, 1);
         int rowsAffected = db.update(TABLE_BOOKINGS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(bookingId)});
-        
+
         if (rowsAffected > 0) {
             Cursor cursor = db.query(TABLE_BOOKINGS, new String[]{COLUMN_USER_ID}, COLUMN_ID + " = ?", new String[]{String.valueOf(bookingId)}, null, null, null);
             if (cursor.moveToFirst()) {
@@ -293,7 +306,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             cursor.close();
         }
-        
+
         return rowsAffected > 0;
     }
 
@@ -416,4 +429,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return false;
     }
-} 
+}
