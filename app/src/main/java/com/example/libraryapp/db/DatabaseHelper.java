@@ -236,9 +236,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        if (alertType.equals("BOOKING_CONFIRMED")) {
+        if (alertType.equals("BOOKING CONFIRMED")) {
             message = "Your booking #" + bookingId + " for " + bookingDate + " has been confirmed.";
-        } else if (alertType.equals("BOOKING_CANCELLED")) {
+        } else if (alertType.equals("BOOKING CANCELLED")) {
             message = "Your booking #" + bookingId + " for " + bookingDate + " has been cancelled.";
         } else {
             message = "An update regarding your booking #" + bookingId + " for " + bookingDate;
@@ -300,7 +300,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Cursor cursor = db.query(TABLE_BOOKINGS, new String[]{COLUMN_USER_ID}, COLUMN_ID + " = ?", new String[]{String.valueOf(bookingId)}, null, null, null);
             if (cursor.moveToFirst()) {
                 int userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID));
-                createBookingAlert(db, userId, bookingId, "BOOKING_CANCELLED");
+                createBookingAlert(db, userId, bookingId, "BOOKING CANCELLED");
             }
             cursor.close();
         }
@@ -423,7 +423,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(bookingId)});
 
         if (rowsAffected > 0) {
-            createBookingAlert(db, userId, bookingId, "BOOKING_UPDATED");
+            createBookingAlert(db, userId, bookingId, "BOOKING UPDATED");
             return true;
         }
         return false;
@@ -451,7 +451,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long bookingId = db.insert(TABLE_BOOKINGS, null, values);
         if (bookingId != -1) {
-            createBookingAlert(db, userId, (int) bookingId, "BOOKING_CONFIRMED");
+            createBookingAlert(db, userId, (int) bookingId, "BOOKING CONFIRMED");
             return true;
         }
         return false;
