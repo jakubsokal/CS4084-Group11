@@ -255,11 +255,26 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         return 60;
     }
 
-        private boolean isUpcoming(Booking booking) {
+    private boolean isUpcoming(Booking booking) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date bookingDate = sdf.parse(booking.getDate());
-            return bookingDate != null && bookingDate.after(new Date());
+            Date today = new Date();
+            Calendar bookingCal = Calendar.getInstance();
+            bookingCal.setTime(bookingDate);
+            bookingCal.set(Calendar.HOUR_OF_DAY, 0);
+            bookingCal.set(Calendar.MINUTE, 0);
+            bookingCal.set(Calendar.SECOND, 0);
+            bookingCal.set(Calendar.MILLISECOND, 0);
+            
+            Calendar todayCal = Calendar.getInstance();
+            todayCal.setTime(today);
+            todayCal.set(Calendar.HOUR_OF_DAY, 0);
+            todayCal.set(Calendar.MINUTE, 0);
+            todayCal.set(Calendar.SECOND, 0);
+            todayCal.set(Calendar.MILLISECOND, 0);
+            
+            return bookingCal.getTime().equals(todayCal.getTime()) || bookingCal.getTime().after(todayCal.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
             return false;

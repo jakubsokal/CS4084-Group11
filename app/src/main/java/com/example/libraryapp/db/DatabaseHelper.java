@@ -166,11 +166,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return userId;
     }
-    //forgotten password button will update the password for a specfic email
     public boolean updatePasswordByEmail(String email, String newPassword) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        String hashedPassword = encryption.encrypt(newPassword); // Use the same method as during registration
+        String hashedPassword = encryption.encrypt(newPassword);
         values.put("password", hashedPassword);
 
         int rowsAffected = db.update("users", values, "LOWER(email) = ?", new String[]{email.toLowerCase()});
@@ -196,7 +195,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.d(TAG, "Email is available, proceeding with registration");
 
             ContentValues values = new ContentValues();
-            //insuring all emails will be stored in lowercase
             values.put(COLUMN_EMAIL, email.toLowerCase());
             String encryptedPassword = encryption.encrypt(password);
             Log.d(TAG, "Password encrypted successfully");
@@ -381,6 +379,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         if (!isSeatAvailableExcludingBooking(floor, table, seat, date, startTime, endTime, bookingId)) {
+            return false;
+        }
+
+        String query = "SELECT * FROM " + TABLE_BOOKINGS + 
+                      " WHERE " + COLUMN_ID + " != ? AND " + 
+                      COLUMN_FLOOR + " = ? AND " + 
+                      COLUMN_TABLE + " = ? AND " + 
+                      COLUMN_SEAT + " = ? AND " + 
+                      COLUMN_DATE + " = ? AND " + 
+                      COLUMN_IS_CANCELLED + " = 0 AND " +
+                      "((? >= " + COLUMN_START_TIME + " AND ? < " + COLUMN_END_TIME + ") OR " +
+                      "(? > " + COLUMN_START_TIME + " AND ? <= " + COLUMN_END_TIME + ") OR " +
+                      "(? <= " + COLUMN_START_TIME + " AND ? >= " + COLUMN_END_TIME + "))";
+
+        cursor = db.rawQuery(query, new String[]{
+            String.valueOf(bookingId),
+            String.valueOf(floor),
+            String.valueOf(table),
+            String.valueOf(seat),
+            date,
+            startTime, startTime,
+            endTime, endTime,
+            startTime, endTime
+        });
+
+        boolean hasOverlap = cursor.moveToFirst();
+        cursor.close();
+
+        if (hasOverlap) {
             return false;
         }
 
