@@ -1,5 +1,6 @@
 package com.example.libraryapp;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.text.ParseException;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.app.AlertDialog;
+import java.util.Calendar;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
     private List<Booking> bookingList;
@@ -48,7 +57,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         if (isUpcoming(booking)) {
             holder.edit_button.setVisibility(View.VISIBLE);
             holder.edit_button.setOnClickListener(v -> {
-                Toast.makeText(v.getContext(), "Edit functionality coming soon", Toast.LENGTH_SHORT).show();
+                showEditDialog(v.getContext(), booking, position);
             });
         } else {
             holder.edit_button.setVisibility(View.GONE);
@@ -70,7 +79,183 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         }
     }
 
-    private boolean isUpcoming(Booking booking) {
+    private void showEditDialog(Context context, Booking booking, int position) {
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_edit_booking, null);
+        TextView dateTextView = dialogView.findViewById(R.id.editDateTextView);
+        TextView timeTextView = dialogView.findViewById(R.id.editTimeTextView);
+        Spinner durationSpinner = dialogView.findViewById(R.id.editDurationSpinner);
+        Spinner floorSpinner = dialogView.findViewById(R.id.editFloorSpinner);
+        Spinner tableSpinner = dialogView.findViewById(R.id.editTableSpinner);
+        Spinner seatSpinner = dialogView.findViewById(R.id.editSeatSpinner);
+
+        dateTextView.setText(booking.getDate());
+        timeTextView.setText(booking.getStartTime());
+
+
+        setupSpinners(context, floorSpinner, tableSpinner, seatSpinner, durationSpinner,
+                booking.getFloorName(), booking.getTableNumber(), booking.getSeatNumber(),
+                calculateDuration(booking.getStartTime(), booking.getEndTime()));
+
+        Calendar selectedDate = Calendar.getInstance();
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            selectedDate.setTime(sdf.parse(booking.getDate()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        dateTextView.setOnClickListener(v -> {
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    context,
+                    (view, year, month, dayOfMonth) -> {
+                        selectedDate.set(Calendar.YEAR, year);
+                        selectedDate.set(Calendar.MONTH, month);
+                        selectedDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        dateTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                .format(selectedDate.getTime()));
+                    },
+                    selectedDate.get(Calendar.YEAR),
+                    selectedDate.get(Calendar.MONTH),
+                    selectedDate.get(Calendar.DAY_OF_MONTH)
+            );
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+            datePickerDialog.show();
+        });
+
+        Calendar selectedTime = Calendar.getInstance();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            selectedTime.setTime(sdf.parse(booking.getStartTime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        timeTextView.setOnClickListener(v -> {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(
+                    context,
+                    (view, hourOfDay, minute) -> {
+                        selectedTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        selectedTime.set(Calendar.MINUTE, minute);
+                        timeTextView.setText(new SimpleDateFormat("HH:mm", Locale.getDefault())
+                                .format(selectedTime.getTime()));
+                    },
+                    selectedTime.get(Calendar.HOUR_OF_DAY),
+                    selectedTime.get(Calendar.MINUTE),
+                    true
+            );
+            timePickerDialog.show();
+        });
+
+        new AlertDialog.Builder(context)
+                .setTitle("Edit Booking")
+                .setView(dialogView)
+                .setPositiveButton("Save", (dialog, which) -> {
+                    String date = dateTextView.getText().toString();
+                    String time = timeTextView.getText().toString();
+                    String duration = durationSpinner.getSelectedItem().toString();
+                    int floor = getFloorId(floorSpinner.getSelectedItem().toString());
+                    int table = getTableId(tableSpinner.getSelectedItem().toString());
+                    int seat = getSeatId(seatSpinner.getSelectedItem().toString());
+
+                    Calendar endTime = Calendar.getInstance();
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                        Date startDate = sdf.parse(time);
+                        endTime.setTime(startDate);
+                        endTime.add(Calendar.MINUTE, getDurationInMinutes(duration));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    String endTimeStr = new SimpleDateFormat("HH:mm", Locale.getDefault())
+                            .format(endTime.getTime());
+
+                    Calendar now = Calendar.getInstance();
+                    Calendar bookingDateTime = Calendar.getInstance();
+                    try {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                        bookingDateTime.setTime(dateFormat.parse(date + " " + time));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (bookingDateTime.before(now)) {
+                        Toast.makeText(context, "Please select a future date and time", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    boolean success = dbHelper.editBooking(
+                            booking.getId(), floor, table, seat, date, time, endTimeStr);
+                    if (success) {
+                        Toast.makeText(context, "Booking updated successfully",
+                                Toast.LENGTH_SHORT).show();
+                        booking.setFloorName("Floor " + floor);
+                        booking.setTableNumber("Table " + table);
+                        booking.setSeatNumber("Seat " + seat);
+                        booking.setDate(date);
+                        booking.setStartTime(time);
+                        booking.setEndTime(endTimeStr);
+                        notifyItemChanged(position);
+                    } else {
+                        Toast.makeText(context, "Failed to update booking. Time slot may be unavailable.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+    private void setupSpinners(Context context, Spinner floorSpinner, Spinner tableSpinner,
+                               Spinner seatSpinner, Spinner durationSpinner,
+                               String currentFloor, String currentTable, String currentSeat,
+                               String currentDuration) {
+        ArrayAdapter<CharSequence> floorAdapter = ArrayAdapter.createFromResource(context,
+                R.array.floors, android.R.layout.simple_spinner_item);
+        floorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        floorSpinner.setAdapter(floorAdapter);
+        int floorPosition = getSpinnerPosition(floorSpinner, currentFloor);
+        if (floorPosition >= 0) floorSpinner.setSelection(floorPosition);
+
+        ArrayAdapter<CharSequence> tableAdapter = ArrayAdapter.createFromResource(context,
+                R.array.tables, android.R.layout.simple_spinner_item);
+        tableAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tableSpinner.setAdapter(tableAdapter);
+        int tablePosition = getSpinnerPosition(tableSpinner, currentTable);
+        if (tablePosition >= 0) tableSpinner.setSelection(tablePosition);
+
+        ArrayAdapter<CharSequence> seatAdapter = ArrayAdapter.createFromResource(context,
+                R.array.seats, android.R.layout.simple_spinner_item);
+        seatAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        seatSpinner.setAdapter(seatAdapter);
+        int seatPosition = getSpinnerPosition(seatSpinner, currentSeat);
+        if (seatPosition >= 0) seatSpinner.setSelection(seatPosition);
+
+        ArrayAdapter<CharSequence> durationAdapter = ArrayAdapter.createFromResource(context,
+                R.array.durations, android.R.layout.simple_spinner_item);
+        durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        durationSpinner.setAdapter(durationAdapter);
+        int durationPosition = getSpinnerPosition(durationSpinner, currentDuration);
+        if (durationPosition >= 0) durationSpinner.setSelection(durationPosition);
+    }
+
+    private int getSpinnerPosition(Spinner spinner, String value) {
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equals(value)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private int getDurationInMinutes(String duration) {
+        if (duration.equals("30 minutes")) return 30;
+        if (duration.equals("1 hour")) return 60;
+        if (duration.equals("1.5 hours")) return 90;
+        if (duration.equals("2 hours")) return 120;
+        return 60;
+    }
+
+        private boolean isUpcoming(Booking booking) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date bookingDate = sdf.parse(booking.getDate());
@@ -103,6 +288,30 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             e.printStackTrace();
         }
         return "N/A";
+    }
+
+    private int getFloorId(String floorName) {
+        try {
+            return Integer.parseInt(floorName.substring(floorName.indexOf(" ") + 1));
+        } catch (NumberFormatException e) {
+            return 1;
+        }
+    }
+
+    private int getTableId(String tableName) {
+        try {
+            return Integer.parseInt(tableName.substring(tableName.indexOf(" ") + 1));
+        } catch (NumberFormatException e) {
+            return 1;
+        }
+    }
+
+    private int getSeatId(String seatName) {
+        try {
+            return Integer.parseInt(seatName.substring(seatName.indexOf(" ") + 1));
+        } catch (NumberFormatException e) {
+            return 1;
+        }
     }
 
     @Override

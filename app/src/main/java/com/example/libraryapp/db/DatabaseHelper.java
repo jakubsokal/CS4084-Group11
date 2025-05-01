@@ -326,6 +326,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count == 0;
     }
 
+    public boolean isSeatAvailableExcludingBooking(int floor, int table, int seat, String date, String startTime, String endTime, int excludeBookingId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM " + TABLE_BOOKINGS + " WHERE " +
+                COLUMN_FLOOR + " = ? AND " +
+                COLUMN_TABLE + " = ? AND " +
+                COLUMN_SEAT + " = ? AND " +
+                COLUMN_DATE + " = ? AND " +
+                COLUMN_IS_CANCELLED + " = 0 AND " +
+                COLUMN_ID + " != ? AND " +
+                "((? BETWEEN " + COLUMN_START_TIME + " AND " + COLUMN_END_TIME + ") OR " +
+                "(? BETWEEN " + COLUMN_START_TIME + " AND " + COLUMN_END_TIME + "))";
+
+        Cursor cursor = db.rawQuery(query, new String[]{
+                String.valueOf(floor),
+                String.valueOf(table),
+                String.valueOf(seat),
+                date,
+                String.valueOf(excludeBookingId),
+                startTime,
+                endTime
+        });
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count == 0;
+    }
+
+    public boolean editBooking(int bookingId, int floor, int table, int seat, String date, String startTime, String endTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.query(TABLE_BOOKINGS, null, COLUMN_ID + " = ?",
+                new String[]{String.valueOf(bookingId)}, null, null, null);
+
+        if (!cursor.moveToFirst()) {
+            cursor.close();
+            return false;
+        }
+
+        int userId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_USER_ID));
+        cursor.close();
+
+        if (!isSeatAvailableExcludingBooking(floor, table, seat, date, startTime, endTime, bookingId)) {
+            return false;
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_FLOOR, floor);
+        values.put(COLUMN_TABLE, table);
+        values.put(COLUMN_SEAT, seat);
+        values.put(COLUMN_DATE, date);
+        values.put(COLUMN_START_TIME, startTime);
+        values.put(COLUMN_END_TIME, endTime);
+
+        int rowsAffected = db.update(TABLE_BOOKINGS, values, COLUMN_ID + " = ?",
+                new String[]{String.valueOf(bookingId)});
+
+        if (rowsAffected > 0) {
+            createBookingAlert(db, userId, bookingId, "BOOKING_UPDATED");
+            return true;
+        }
+        return false;
+    }
+
     public boolean createBooking(int userId, int floorId, int roomId, int tableId, int seatId, String date, String startTime, String endTime) {
         return createBooking(userId, floorId, tableId, seatId, date, startTime, endTime);
     }
