@@ -185,32 +185,26 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                         return;
                     }
 
-                    new Thread(() -> {
-                        boolean success = dbHelper.editBooking(
-                                booking.getId(), floor, table, seat, date, time, endTimeStr);
-
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            if (success) {
-                                Toast.makeText(context, "Booking updated successfully",
-                                        Toast.LENGTH_SHORT).show();
-                                booking.setFloorName("Floor " + floor);
-                                booking.setTableNumber("Table " + table);
-                                booking.setSeatNumber("Seat " + seat);
-                                booking.setDate(date);
-                                booking.setStartTime(time);
-                                booking.setEndTime(endTimeStr);
-                                notifyItemChanged(position);
-                            } else {
-                                Toast.makeText(context, "Failed to update booking. Time slot may be unavailable.",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }).start();
+                    boolean success = dbHelper.editBooking(
+                            booking.getId(), floor, table, seat, date, time, endTimeStr);
+                    if (success) {
+                        Toast.makeText(context, "Booking updated successfully",
+                                Toast.LENGTH_SHORT).show();
+                        booking.setFloorName("Floor " + floor);
+                        booking.setTableNumber("Table " + table);
+                        booking.setSeatNumber("Seat " + seat);
+                        booking.setDate(date);
+                        booking.setStartTime(time);
+                        booking.setEndTime(endTimeStr);
+                        notifyItemChanged(position);
+                    } else {
+                        Toast.makeText(context, "Failed to update booking. Time slot may be unavailable.",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
-
     private void setupSpinners(Context context, Spinner floorSpinner, Spinner tableSpinner,
                                Spinner seatSpinner, Spinner durationSpinner,
                                String currentFloor, String currentTable, String currentSeat,
