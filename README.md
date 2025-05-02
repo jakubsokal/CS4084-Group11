@@ -37,31 +37,30 @@ University of Limerick Library App, this app allows students to book, manage, an
 ## Feature Testing Guide
 
 ### User Registration
-1. From the login screen, tap "Register"
+1. From the login screen, tap "Register" button
 2. Fill in the registration form with:
    - Your UL email address
    - A secure password
-3. Tap "Register" to create your account
-4. You should receive a confirmation message
+3. Tap "Register" button to create your account
+4. If registration is successful you will receive a confirmation message
 5. Return to the login screen to test your new credentials
 
 ### User Login
 1. Enter your registered email address
 2. Enter your password
-3. Tap "Login"
-4. You should be redirected to the main screen
+3. Tap "Login" button
+4. If login successful you should be redirected to the main screen
 
 ### Making a Booking
-1. From the main screen, tap "Book a Seat"
+1. From the main screen, tap "Book a Seat" button
 2. Select your preferred:
-   - Floor (1-3)
-   - Room
+   - Floor
    - Table
    - Seat
 3. Choose your booking date using the date picker
 4. Select your start time using the time picker
 5. Choose your booking duration (30 minutes to 2 hours)
-6. Tap "Confirm Booking"
+6. Tap "Confirm Booking" button
 7. Verify that:
    - You receive a confirmation message
    - The booking appears in your "Upcoming" bookings
@@ -86,9 +85,9 @@ University of Limerick Library App, this app allows students to book, manage, an
    - Change the date
    - Change the time
    - Change the duration
-   - Change the seat location
+   - Change the seat
 4. Verify that:
-   - You can't edit bookings less than 1 hour before start time
+   - You can't edit bookings less than 1 hour before schedule time
    - You can't create overlapping bookings
    - Changes are saved correctly
    - You receive a notification about the edit
@@ -98,7 +97,6 @@ University of Limerick Library App, this app allows students to book, manage, an
 2. Test cancellation for different scenarios:
    - Future bookings
    - Current bookings (in progress)
-   - Past bookings
 3. Verify that:
    - You can cancel bookings until they end
    - The cancel button disappears after the booking ends
@@ -111,7 +109,6 @@ University of Limerick Library App, this app allows students to book, manage, an
    - All past bookings are visible
    - Bookings are sorted by date (most recent first)
    - Booking details are complete and accurate
-   - Cancelled bookings are marked appropriately
 
 ### Notifications and Alerts
 1. Test different notification scenarios:
