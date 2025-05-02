@@ -25,8 +25,10 @@ import android.app.AlertDialog;
 import java.util.Calendar;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.util.Log;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingViewHolder> {
+    private static final String TAG = "BookingAdapter";
     private List<Booking> bookingList;
     private DatabaseHelper dbHelper;
 
@@ -63,7 +65,9 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             holder.edit_button.setVisibility(View.GONE);
         }
 
-        if (!booking.isCancelled()) {
+        if (isCurrentOrPast(booking)) {
+            holder.cancel_button.setVisibility(View.GONE);
+        } else {
             holder.cancel_button.setVisibility(View.VISIBLE);
             holder.cancel_button.setOnClickListener(v -> {
                 if (dbHelper.cancelBooking(booking.getId())) {
@@ -74,8 +78,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                     Toast.makeText(v.getContext(), "Failed to cancel booking", Toast.LENGTH_SHORT).show();
                 }
             });
-        } else {
-            holder.cancel_button.setVisibility(View.GONE);
         }
     }
 
@@ -257,26 +259,45 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
     private boolean isUpcoming(Booking booking) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date bookingDate = sdf.parse(booking.getDate());
-            Date today = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            Date bookingDateTime = sdf.parse(booking.getDate() + " " + booking.getStartTime());
+            Date now = new Date();
+            
+            Calendar nowPlusOneHour = Calendar.getInstance();
+            nowPlusOneHour.setTime(now);
+            nowPlusOneHour.add(Calendar.HOUR_OF_DAY, 1);
+            
             Calendar bookingCal = Calendar.getInstance();
-            bookingCal.setTime(bookingDate);
+            bookingCal.setTime(bookingDateTime);
             bookingCal.set(Calendar.HOUR_OF_DAY, 0);
             bookingCal.set(Calendar.MINUTE, 0);
             bookingCal.set(Calendar.SECOND, 0);
             bookingCal.set(Calendar.MILLISECOND, 0);
             
             Calendar todayCal = Calendar.getInstance();
-            todayCal.setTime(today);
+            todayCal.setTime(now);
             todayCal.set(Calendar.HOUR_OF_DAY, 0);
             todayCal.set(Calendar.MINUTE, 0);
             todayCal.set(Calendar.SECOND, 0);
             todayCal.set(Calendar.MILLISECOND, 0);
             
-            return bookingCal.getTime().equals(todayCal.getTime()) || bookingCal.getTime().after(todayCal.getTime());
+            return (bookingCal.getTime().equals(todayCal.getTime()) || bookingCal.getTime().after(todayCal.getTime())) 
+                   && bookingDateTime.after(nowPlusOneHour.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean isCurrentOrPast(Booking booking) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            Date bookingEnd = sdf.parse(booking.getDate() + " " + booking.getEndTime());
+            Date now = new Date();
+            
+            return bookingEnd.before(now);
+        } catch (ParseException e) {
+            Log.e(TAG, "Error parsing date: " + e.getMessage());
             return false;
         }
     }
