@@ -109,6 +109,7 @@ University of Limerick Library App, this app allows students to book, manage, an
    - All past bookings are visible
    - Bookings are sorted by date (most recent first)
    - Booking details are complete and accurate
+   - Cancelled bookings are not shown
 
 ### Notifications and Alerts
 1. Test different notification scenarios:
