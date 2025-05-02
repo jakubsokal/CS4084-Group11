@@ -3,7 +3,6 @@ package com.example.libraryapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        Log.d(TAG, "RegisterActivity onCreate called");
+        Animation animation = new Animation();
         dbHelper = new DatabaseHelper(this);
 
         registerEmail = findViewById(R.id.register_email);
@@ -37,19 +36,19 @@ public class RegisterActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back);
 
         registerSubmit.setOnClickListener(v -> {
-            Log.d(TAG, "Register button clicked");
+            animation.animateButtonTint(registerSubmit);
             handleRegistration();
         });
 
         loginNow.setOnClickListener(v -> {
-            Log.d(TAG, "Login now link clicked");
+            animation.animateHyperLink(loginNow);
             startActivity(new Intent(RegisterActivity.this, LoginPage.class));
             finish();
         });
 
         backButton.setOnClickListener(v -> {
-            Log.d(TAG, "Back button clicked");
-            startActivity(new Intent(RegisterActivity.this, LoginPage.class));
+            animation.animateButtonTint(backButton);
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
             finish();
         });
     }

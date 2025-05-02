@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -19,37 +20,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Floor: "
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:ignore="HardcodedText"/>
 
         <TextView
             android:id="@+id/dateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Date: " />
+            android:text="Date: "
+            tools:ignore="HardcodedText"/>
 
         <TextView
             android:id="@+id/seatText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Seat: " />
+            android:text="Seat: "
+            tools:ignore="HardcodedText"/>
 
         <TextView
             android:id="@+id/roomText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Room: " />
+            android:text="Room: "
+            tools:ignore="HardcodedText"/>
 
         <TextView
             android:id="@+id/timeText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Time: " />
+            android:text="Time: "
+            tools:ignore="HardcodedText"/>
 
         <TextView
             android:id="@+id/durationText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Duration: " />
+            android:text="Duration: "
+            tools:ignore="HardcodedText"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,18 +65,26 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/edit_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Edit" />
-
-            <Button
                 android:id="@+id/cancel_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Cancel" />
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/rounded_button"
+                style="@android:style/ButtonBar"
+                android:text="Cancel"
+                tools:ignore="HardcodedText"/>
+
+            <Button
+                android:id="@+id/edit_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:background="@drawable/rounded_button"
+                style="@android:style/ButtonBar"
+                android:text="Edit"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>
 

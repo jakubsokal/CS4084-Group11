@@ -1,5 +1,7 @@
 package com.example.libraryapp;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.res.ColorStateList;
@@ -15,14 +17,25 @@ public class Animation {
 
         int endColor = (startColor == Color.parseColor("#00A950")) ? Color.parseColor("#036632")
                 : (startColor == Color.parseColor("#35C2C1")) ? Color.parseColor("#019CB4")
+                : (startColor == Color.parseColor("#036632")) ? Color.parseColor("#00A950")
                 : Color.parseColor("#6D6D6D");
 
         ValueAnimator colorAnim = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, endColor);
-        colorAnim.setDuration(400);
+        colorAnim.setDuration(260);
+
         colorAnim.addUpdateListener(animator -> {
             int animatedColor = (int) animator.getAnimatedValue();
             button.setBackgroundTintList(ColorStateList.valueOf(animatedColor));
         });
+
+        colorAnim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                ColorStateList original = ColorStateList.valueOf(startColor);
+                button.setBackgroundTintList(original);
+            }
+        });
+
         colorAnim.start();
     }
 

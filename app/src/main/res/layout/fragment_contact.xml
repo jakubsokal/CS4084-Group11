@@ -7,36 +7,22 @@
     android:orientation="vertical"
     tools:context=".ContactFragment">
 
-    <Toolbar
-        android:id="@+id/toolbar_top"
+    <ImageView
+        android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/green"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Background Image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:text="."
-        android:id="@+id/back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="110dp"
-        android:layout_marginStart="25dp"
-        android:background="@drawable/rounded_button"
-        android:paddingStart="13dp"
-        android:drawableLeft="@drawable/back_arrow"
-        app:backgroundTint="@color/grey"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/contact_heading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contact Us Here At: "
-        android:textColor="@color/black"
+        android:text="Contact Us"
+        android:textColor="@color/white"
         android:textSize="35sp"
         android:textAlignment="center"
         android:gravity="center"
@@ -45,14 +31,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="225dp"
         android:paddingHorizontal="20dp"
-        />
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/contact_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Phone Number: 0833333333"
-        android:textColor="@color/black"
+        android:text="Phone Number: (061) 202 166"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textAlignment="center"
         android:gravity="center"
@@ -61,14 +47,14 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="20dp"
         android:paddingHorizontal="20dp"
-        />
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/contact_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email Address: ullibrary@ul.ie"
-        android:textColor="@color/black"
+        android:text="Email Address: libinfo@ul.ie"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:textAlignment="center"
         android:gravity="center"
@@ -77,15 +63,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="5dp"
         android:paddingHorizontal="20dp"
-        />
+        tools:ignore="HardcodedText" />
 
-    <Toolbar
-        android:id="@+id/toolbar_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/green"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

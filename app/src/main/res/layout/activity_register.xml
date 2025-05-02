@@ -42,43 +42,48 @@
 
     <TextView
         android:id="@+id/welcome_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Hi there, Register to get started! "
-        android:textColor="@color/white"
+        android:layout_width="300sp"
+        android:layout_height="100sp"
+        android:layout_marginTop="200dp"
+        android:layout_marginStart="45dp"
         android:textSize="30sp"
-        android:textAlignment="center"
-        android:gravity="center"
+        android:textColor="@color/white"
+        android:text="Hi there, Register to get started! "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="170dp"
-        android:paddingHorizontal="20dp"/>
+        tools:ignore="HardcodedText" />
 
     <EditText
         android:id="@+id/register_email"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:paddingStart="10dp"
+        android:textSize="14sp"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
         android:layout_marginHorizontal="40dp"
         android:maxWidth="320dp"
         android:background="@drawable/custom_input"
-        android:hint="studentnumber@studentmail.ul.ie"
+        android:hint="Ul Email"
         android:inputType="textEmailAddress"
+        android:autofillHints="emailAddress"
         android:padding="10dp"
         android:textColor="@color/green"
         android:textColorHint="@color/grey"
         app:layout_constraintTop_toBottomOf="@id/welcome_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="50dp"/>
+        android:layout_marginTop="50dp"
+        tools:ignore="HardcodedText,RtlSymmetry" />
 
     <EditText
         android:id="@+id/register_password"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:paddingStart="10dp"
+        android:textSize="14sp"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
         android:layout_marginHorizontal="40dp"
         android:maxWidth="320dp"
         android:background="@drawable/custom_input"
+        android:autofillHints="password"
         android:hint="Password"
         android:inputType="textPassword"
         android:padding="10dp"
@@ -87,13 +92,17 @@
         app:layout_constraintTop_toBottomOf="@+id/register_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        tools:ignore="HardcodedText,RtlSymmetry" />
 
     <EditText
         android:id="@+id/register_confirm_password"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:paddingStart="10dp"
+        android:textSize="14sp"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
         android:layout_marginHorizontal="40dp"
+        android:autofillHints="password"
         android:layout_marginTop="10dp"
         android:maxWidth="320dp"
         android:background="@drawable/custom_input"
@@ -104,7 +113,8 @@
         android:textColorHint="@color/grey"
         app:layout_constraintTop_toBottomOf="@+id/register_password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="HardcodedText,RtlSymmetry" />
 
 
     <Button
@@ -121,38 +131,40 @@
         tools:ignore="HardcodedText" />
 
     <TextView
-        android:id="@+id/login_question"
+        android:id="@+id/login_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="Already have an account?"
         android:textColor="@color/white"
-        android:textSize="15sp"
-        app:layout_constraintTop_toBottomOf="@+id/register_submit"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/register_submit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="HardcodedText,TextSizeCheck" />
+        app:layout_constraintEnd_toStartOf="@id/login_now_link"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/login_now_link"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Login Now"
-        android:textColor="@color/blue"
-        android:textSize="15sp"
+        android:text="Login"
+        android:textColor="@color/cyan"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintTop_toBottomOf="@+id/login_question"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/register_submit"
+        app:layout_constraintStart_toEndOf="@id/login_text"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="HardcodedText,TextSizeCheck" />
+        tools:ignore="HardcodedText" />
 
 
     <Toolbar
         android:id="@+id/toolbar_bottom"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:background="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,6 +1,8 @@
 package com.example.libraryapp;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,16 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.libraryapp.Booking;
-import com.example.libraryapp.R;
 import com.example.libraryapp.db.DatabaseHelper;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.text.ParseException;
-import android.os.Handler;
-import android.os.Looper;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import android.app.AlertDialog;
@@ -46,22 +44,31 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
     @Override
     public void onBindViewHolder(@NonNull BookingViewHolder holder, int position) {
+        Animation animation = new Animation();
         Booking booking = bookingList.get(position);
-        holder.floorText.setText("Floor: " + booking.getFloorName());
-        holder.dateText.setText("Date: " + booking.getDate());
-        holder.seatText.setText("Seat: " + booking.getSeatNumber());
-        holder.roomText.setText("Room: " + booking.getRoomName());
-        holder.timeText.setText("Time: " + booking.getStartTime() + " - " + booking.getEndTime());
+        String floor = "Floor: " + booking.getFloorName();
+        String date = "Date: " + booking.getDate();
+        String seat = "Seat: " + booking.getSeatNumber();
+        String room = "Room: " + booking.getRoomName();
+        String time = "Time: " + booking.getStartTime() + " - " + booking.getEndTime();
+        holder.floorText.setText(floor);
+        holder.dateText.setText(date);
+        holder.seatText.setText(seat);
+        holder.roomText.setText(room);
+        holder.timeText.setText(time);
 
-        String duration = calculateDuration(booking.getStartTime(), booking.getEndTime());
-        holder.durationText.setText("Duration: " + duration);
+        String duration = "Duration: " + calculateDuration(booking.getStartTime(), booking.getEndTime());
+        holder.durationText.setText(duration);
 
         if (isUpcoming(booking)) {
             holder.edit_button.setVisibility(View.VISIBLE);
             holder.edit_button.setOnClickListener(v -> {
+                holder.edit_button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#00A950")));
+                animation.animateButtonTint(holder.edit_button);
                 showEditDialog(v.getContext(), booking, position);
             });
         } else {
+            holder.cancel_button.setVisibility(View.GONE);
             holder.edit_button.setVisibility(View.GONE);
         }
 
@@ -70,6 +77,8 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         } else {
             holder.cancel_button.setVisibility(View.VISIBLE);
             holder.cancel_button.setOnClickListener(v -> {
+                holder.cancel_button.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#00A950")));
+                animation.animateButtonTint(holder.cancel_button);
                 if (dbHelper.cancelBooking(booking.getId())) {
                     booking.setCancelled(true);
                     notifyItemChanged(position);
@@ -78,6 +87,11 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                     Toast.makeText(v.getContext(), "Failed to cancel booking", Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+
+        if (booking.isCancelled()) {
+            holder.cancel_button.setVisibility(View.GONE);
+            holder.edit_button.setVisibility(View.GONE);
         }
     }
 
@@ -182,8 +196,13 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
                         e.printStackTrace();
                     }
 
-                    if (bookingDateTime.before(now)) {
-                        Toast.makeText(context, "Please select a future date and time", Toast.LENGTH_SHORT).show();
+                    bookingDateTime.set(Calendar.SECOND, 0);
+                    bookingDateTime.set(Calendar.MILLISECOND, 0);
+                    now.set(Calendar.SECOND, 0);
+                    now.set(Calendar.MILLISECOND, 0);
+
+                    if (bookingDateTime.compareTo(now) < 0) {
+                        Toast.makeText(context, "Please select a future time", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -250,10 +269,16 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
     }
 
     private int getDurationInMinutes(String duration) {
-        if (duration.equals("30 minutes")) return 30;
-        if (duration.equals("1 hour")) return 60;
-        if (duration.equals("1.5 hours")) return 90;
-        if (duration.equals("2 hours")) return 120;
+        switch (duration) {
+            case "30 minutes":
+                return 30;
+            case "1 hour":
+                return 60;
+            case "1.5 hours":
+                return 90;
+            case "2 hours":
+                return 120;
+        }
         return 60;
     }
 
@@ -262,11 +287,11 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
             Date bookingDateTime = sdf.parse(booking.getDate() + " " + booking.getStartTime());
             Date now = new Date();
-            
+
             Calendar nowPlusOneHour = Calendar.getInstance();
             nowPlusOneHour.setTime(now);
             nowPlusOneHour.add(Calendar.HOUR_OF_DAY, 1);
-            
+
             Calendar bookingCal = Calendar.getInstance();
             bookingCal.setTime(bookingDateTime);
             bookingCal.set(Calendar.HOUR_OF_DAY, 0);
@@ -281,7 +306,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             todayCal.set(Calendar.SECOND, 0);
             todayCal.set(Calendar.MILLISECOND, 0);
             
-            return (bookingCal.getTime().equals(todayCal.getTime()) || bookingCal.getTime().after(todayCal.getTime())) 
+            return (bookingCal.getTime().equals(todayCal.getTime()) || bookingCal.getTime().after(todayCal.getTime()))
                    && bookingDateTime.after(nowPlusOneHour.getTime());
         } catch (ParseException e) {
             e.printStackTrace();
@@ -294,7 +319,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
             Date bookingEnd = sdf.parse(booking.getDate() + " " + booking.getEndTime());
             Date now = new Date();
-            
+
             return bookingEnd.before(now);
         } catch (ParseException e) {
             Log.e(TAG, "Error parsing date: " + e.getMessage());

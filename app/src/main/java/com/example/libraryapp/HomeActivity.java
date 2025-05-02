@@ -18,7 +18,6 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
     private BottomNavigationView bottomNav;
     private DatabaseHelper dbHelper;
     private int userId;
-    private Animation animation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +28,6 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
         String userEmail = getIntent().getStringExtra("email");
         dbHelper = new DatabaseHelper(this);
         userId = dbHelper.getUserIdByEmail(userEmail);
-        
-        animation = new Animation();
         
         bottomNav = findViewById(R.id.bottom_navigation);
 
@@ -92,8 +89,6 @@ public class HomeActivity extends AppCompatActivity implements INavbar {
                 args.putInt("userId", userId);
                 alertsFragment.setArguments(args);
                 selectedFragment = alertsFragment;
-            } else if (click.getItemId() == R.id.menu_account) {
-                //add account fragment here
             } else if (click.getItemId() == R.id.menu_contact) {
                 selectedFragment = new ContactFragment();
             } else {
