@@ -72,6 +72,12 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if(password.length() < 8) {
+            Log.d(TAG, "Too short password");
+            Toast.makeText(this, "Please make sure your password is at least 8 characters long", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!email.endsWith("@studentmail.ul.ie") && !email.endsWith("@ul.ie")) {
             Log.d(TAG, "Invalid email format");
             Toast.makeText(this, "Please use a valid UL email address", Toast.LENGTH_SHORT).show();
