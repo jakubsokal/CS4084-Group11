@@ -80,11 +80,16 @@ public class ManageFragment extends Fragment {
 
         currentBookings.clear();
         if (filterType.equals("All")) {
-            currentBookings.addAll(bookingList);
+            for (Booking booking : bookingList) {
+                if (!booking.isCancelled()) {
+                    currentBookings.add(booking);
+                }
+            }
         } else {
             for (Booking booking : bookingList) {
-                if ((filterType.equals("Upcoming") && isUpcoming(booking)) ||
-                        (filterType.equals("History") && isPast(booking))) {
+                if (!booking.isCancelled() && 
+                    ((filterType.equals("Upcoming") && isUpcoming(booking)) ||
+                     (filterType.equals("History") && isPast(booking)))) {
                     currentBookings.add(booking);
                 }
             }

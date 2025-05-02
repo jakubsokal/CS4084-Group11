@@ -57,7 +57,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         holder.roomText.setText(room);
         holder.timeText.setText(time);
 
-        String duration = "Duration: " + calculateDuration(booking.getStartTime(), booking.getEndTime());
+        String duration = "Duration: " + calculateDuration(booking.getStartTime(), booking.getEndTime()).replace("-","");
         holder.durationText.setText(duration);
 
         if (isUpcoming(booking)) {
