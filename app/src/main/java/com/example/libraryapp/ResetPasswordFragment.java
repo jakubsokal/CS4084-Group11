@@ -1,5 +1,6 @@
 package com.example.libraryapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,11 @@ public class ResetPasswordFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_reset_password, container, false);
 
+        Button back = view.findViewById(R.id.back);
+
+        back.setOnClickListener( c -> {
+            getActivity().finish();
+        });
         emailEditText = view.findViewById(R.id.reset_email);
         newPasswordEditText = view.findViewById(R.id.new_password);
         Button changePasswordBtn = view.findViewById(R.id.change_password_btn);
