@@ -17,7 +17,11 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         selector = (INavbar) getContext();
+        Animation animation = new Animation();
         Button bookButton = view.findViewById(R.id.bookSeat);
-        bookButton.setOnClickListener(click -> selector.bottomNavItemSelected(R.id.navbar_book));
+        bookButton.setOnClickListener(click -> {
+            animation.animateButtonTint(bookButton);
+            selector.bottomNavItemSelected(R.id.navbar_book);
+        });
     }
 }

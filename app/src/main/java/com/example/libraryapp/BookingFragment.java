@@ -3,6 +3,8 @@ package com.example.libraryapp;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -22,9 +24,7 @@ import android.os.Looper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.text.ParseException;
 
 public class BookingFragment extends Fragment {
     private TextView dateTextView, timeTextView;
@@ -42,7 +42,8 @@ public class BookingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+        Animation animation = new Animation();
+
         dateTextView = view.findViewById(R.id.dateTextView);
         timeTextView = view.findViewById(R.id.timeTextView);
         floorSpinner = view.findViewById(R.id.floorSpinner);
@@ -59,7 +60,11 @@ public class BookingFragment extends Fragment {
 
         dateTextView.setOnClickListener(v -> showDatePicker());
         timeTextView.setOnClickListener(v -> showTimePicker());
-        bookButton.setOnClickListener(v -> validateAndShowConfirmation());
+        bookButton.setOnClickListener(v -> {
+            bookButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#00A950")));
+            animation.animateButtonTint(bookButton);
+            validateAndShowConfirmation();
+        });
 
         setupSpinners();
     }
@@ -172,9 +177,13 @@ public class BookingFragment extends Fragment {
         Calendar selectedDateTime = (Calendar) selectedDate.clone();
         selectedDateTime.set(Calendar.HOUR_OF_DAY, selectedTime.get(Calendar.HOUR_OF_DAY));
         selectedDateTime.set(Calendar.MINUTE, selectedTime.get(Calendar.MINUTE));
+        selectedDateTime.set(Calendar.SECOND, 0);
+        selectedDateTime.set(Calendar.MILLISECOND, 0);
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
 
-        if (selectedDateTime.before(now)) {
-            Toast.makeText(requireContext(), "Please select a future date and time", Toast.LENGTH_SHORT).show();
+        if (selectedDateTime.compareTo(now) < 0) {
+            Toast.makeText(requireContext(), "Please select a future time", Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -261,14 +270,15 @@ public class BookingFragment extends Fragment {
     }
 
     private int getDurationInMinutes(String duration) {
-        if (duration.equals("30 minutes")) {
-            return 30;
-        } else if (duration.equals("1 hour")) {
-            return 60;
-        } else if (duration.equals("1.5 hours")) {
-            return 90;
-        } else if (duration.equals("2 hours")) {
-            return 120;
+        switch (duration) {
+            case "30 minutes":
+                return 30;
+            case "1 hour":
+                return 60;
+            case "1.5 hours":
+                return 90;
+            case "2 hours":
+                return 120;
         }
         return 60;
     }

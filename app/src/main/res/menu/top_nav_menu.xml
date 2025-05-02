@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/menu_home"
         android:title="Home"
@@ -25,11 +26,6 @@
         android:icon="@drawable/notifications_filled"
         tools:ignore="HardcodedText" />
 
-    <item
-        android:id="@+id/menu_account"
-        android:title="Account"
-        android:icon="@drawable/account_filled"
-        tools:ignore="HardcodedText" />
 
     <item
         android:id="@+id/menu_contact"

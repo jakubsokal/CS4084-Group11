@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHolder> {
     private List<AlertItem> alerts;
-    private OnAlertClickListener listener;
+    private final OnAlertClickListener listener;
 
     public interface OnAlertClickListener {
         void onAlertClick(AlertItem alert);
@@ -45,7 +45,7 @@ public class AlertAdapter extends RecyclerView.Adapter<AlertAdapter.AlertViewHol
         notifyDataSetChanged();
     }
 
-    class AlertViewHolder extends RecyclerView.ViewHolder {
+    public class AlertViewHolder extends RecyclerView.ViewHolder {
         private TextView alertTypeText;
         private TextView messageText;
         private TextView createdAtText;

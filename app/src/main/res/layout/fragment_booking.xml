@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,7 +11,8 @@
         android:layout_height="wrap_content"
         android:text="Select Date"
         android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/dateTextView"
@@ -25,7 +27,8 @@
         android:layout_height="wrap_content"
         android:text="Select Time"
         android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/timeTextView"
@@ -40,7 +43,8 @@
         android:layout_height="wrap_content"
         android:text="Select Duration"
         android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        tools:ignore="HardcodedText"/>
 
     <Spinner
         android:id="@+id/durationSpinner"
@@ -53,7 +57,8 @@
         android:layout_height="wrap_content"
         android:text="Select Floor"
         android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        tools:ignore="HardcodedText"/>
 
     <Spinner
         android:id="@+id/floorSpinner"
@@ -66,7 +71,8 @@
         android:layout_height="wrap_content"
         android:text="Select Table"
         android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        tools:ignore="HardcodedText"/>
 
     <Spinner
         android:id="@+id/tableSpinner"
@@ -79,7 +85,8 @@
         android:layout_height="wrap_content"
         android:text="Select Seat"
         android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        tools:ignore="HardcodedText"/>
 
     <Spinner
         android:id="@+id/seatSpinner"
@@ -92,7 +99,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Book Now"
-        android:padding="12dp"/>
+        android:background="@drawable/rounded_button"
+        android:padding="12dp"
+        tools:ignore="HardcodedText"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
