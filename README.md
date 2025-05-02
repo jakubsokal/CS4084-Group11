@@ -1,6 +1,6 @@
 # Library Seat Booking App
 
-University of Limerick, this app allows students to book, manage, and cancel their library seat reservations.
+University of Limerick Library App, this app allows students to book, manage, and cancel their library seat reservations.
 
 ## Table of Contents
 1. [Installation](#installation)
