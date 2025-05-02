@@ -49,6 +49,11 @@ public class ResetPasswordFragment extends Fragment {
                 return;
             }
 
+            if(newPassword.length() < 8) {
+                Toast.makeText(getContext(), "Please make sure your new password is at least 8 characters long", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             boolean updated = db.updatePasswordByEmail(email, newPassword);
             if (updated) {
                 Toast.makeText(getContext(), "Password updated successfully", Toast.LENGTH_SHORT).show();
