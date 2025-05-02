@@ -12,14 +12,15 @@ import android.widget.Spinner;
 import android.util.Log;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import com.example.libraryapp.db.DatabaseHelper;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import com.example.libraryapp.db.DatabaseHelper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManageFragment extends Fragment {
     private static final String TAG = "ManageFragment";
@@ -92,9 +93,26 @@ public class ManageFragment extends Fragment {
 
     private boolean isUpcoming(Booking booking) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date bookingDate = sdf.parse(booking.getDate());
-            return bookingDate != null && bookingDate.after(new Date());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            Date bookingDateTime = sdf.parse(booking.getDate() + " " + booking.getStartTime());
+            Date now = new Date();
+            
+            Calendar bookingCal = Calendar.getInstance();
+            bookingCal.setTime(bookingDateTime);
+            bookingCal.set(Calendar.HOUR_OF_DAY, 0);
+            bookingCal.set(Calendar.MINUTE, 0);
+            bookingCal.set(Calendar.SECOND, 0);
+            bookingCal.set(Calendar.MILLISECOND, 0);
+            
+            Calendar todayCal = Calendar.getInstance();
+            todayCal.setTime(now);
+            todayCal.set(Calendar.HOUR_OF_DAY, 0);
+            todayCal.set(Calendar.MINUTE, 0);
+            todayCal.set(Calendar.SECOND, 0);
+            todayCal.set(Calendar.MILLISECOND, 0);
+            
+            return bookingCal.getTime().after(todayCal.getTime()) || 
+                   (bookingCal.getTime().equals(todayCal.getTime()) && bookingDateTime.after(now));
         } catch (ParseException e) {
             Log.e(TAG, "Error parsing date: " + e.getMessage());
             return false;
@@ -103,9 +121,26 @@ public class ManageFragment extends Fragment {
 
     private boolean isPast(Booking booking) {
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            Date bookingDate = sdf.parse(booking.getDate());
-            return bookingDate != null && bookingDate.before(new Date());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+            Date bookingDateTime = sdf.parse(booking.getDate() + " " + booking.getStartTime());
+            Date now = new Date();
+            
+            Calendar bookingCal = Calendar.getInstance();
+            bookingCal.setTime(bookingDateTime);
+            bookingCal.set(Calendar.HOUR_OF_DAY, 0);
+            bookingCal.set(Calendar.MINUTE, 0);
+            bookingCal.set(Calendar.SECOND, 0);
+            bookingCal.set(Calendar.MILLISECOND, 0);
+            
+            Calendar todayCal = Calendar.getInstance();
+            todayCal.setTime(now);
+            todayCal.set(Calendar.HOUR_OF_DAY, 0);
+            todayCal.set(Calendar.MINUTE, 0);
+            todayCal.set(Calendar.SECOND, 0);
+            todayCal.set(Calendar.MILLISECOND, 0);
+            
+            return bookingCal.getTime().before(todayCal.getTime()) || 
+                   (bookingCal.getTime().equals(todayCal.getTime()) && bookingDateTime.before(now));
         } catch (ParseException e) {
             Log.e(TAG, "Error parsing date: " + e.getMessage());
             return false;
